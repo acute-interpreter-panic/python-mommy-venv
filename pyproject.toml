@@ -1,0 +1,27 @@
+[project]
+description = "Mommy's here to support you when running python (in a virtual enviroment)~ ❤️"
+name = "python_mommy_venv"
+dependencies = ['termcolor']
+authors = []
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    'Programming Language :: Python :: 3',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: OS Independent',
+]
+version = "0.0.0"
+license-files = ["LICENSE"]
+
+[project.scripts]
+python-mommy-dev = "python_mommy_venv.__main__:development"
+
+[build-system]
+requires = ["hatchling", "hatch-requirements-txt"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+directory = "dist"
+
+[tool.hatch.build.targets.wheel]
+packages = ["python_mommy_venv"]
