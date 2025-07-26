@@ -1,7 +1,11 @@
 from typing import Optional, List
 import os
+from os.path import expandvars
+from sys import platform
 import logging
 from pathlib import Path
+import configparser
+import toml
 
 from .static import RESPONSES
 
@@ -70,3 +74,72 @@ def load_config(data: Optional[dict] = None):
     CONFIG = data
 
 load_config()
+
+def _get_xdg_config_dir() -> Path:
+    res = os.environ.get("XDG_CONFIG_HOME")
+    if res is not None:
+        return Path(res)
+
+    xdg_user_dirs_file = Path(os.environ.get("XDG_CONFIG_HOME") or Path(Path.home(), ".config", "user-dirs.dirs"))
+    xdg_user_dirs_default_file = Path("/etc/xdg/user-dirs.defaults")
+
+    def get_dir_from_xdg_file(xdg_file_path: Path, key_a: str) -> Optional[str]:
+        if not xdg_file_path.exists():
+            logger.info("config file not found in %s", str(xdg_file_path))
+            return
+
+        with xdg_file_path.open("r") as f:
+            for line in f:
+                if line.startswith("#"):
+                    continue
+
+                parts = line.split("=")
+                if len(parts) > 2:
+                    continue
+
+                key_b = parts[0].lower().strip()
+                value = parts[1].strip().split("#")[0]
+
+                if key_a.lower() == key_b:
+                    return value
+
+        logger.info("key %s not found in %s", key_a, str(xdg_file_path))
+
+    res = get_dir_from_xdg_file(xdg_user_dirs_file, "XDG_CONFIG_HOME")
+    if res is not None:
+        return Path(res)
+
+    res = get_dir_from_xdg_file(xdg_user_dirs_default_file, "CONFIG")
+    if res is not None:
+        return Path(Path.home(), res)
+
+
+    res = get_dir_from_xdg_file(xdg_user_dirs_default_file, "XDG_CONFIG_HOME")
+    if res is not None:
+        return Path(Path.home(), res)
+
+    default = Path(Path.home(), ".config")
+    logging.info("falling back to %s", default)
+    return default
+
+
+_CONFIG_DIRECTORY = _get_xdg_config_dir() / "mommy"
+CONFIG_FILES = [
+    _CONFIG_DIRECTORY / "python-mommy.toml",
+    _CONFIG_DIRECTORY / "mommy.toml",
+]
+
+def load_config_file(config_file: Path) -> bool:
+    if not config_file.exists():
+        return False
+
+    with config_file.open("r") as f:
+        data = toml.load(f)
+        load_config(data=data)
+
+    return True
+
+
+for c in CONFIG_FILES:
+    if load_config_file(c):
+        break

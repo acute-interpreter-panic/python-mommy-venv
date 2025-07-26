@@ -1,7 +1,7 @@
 [project]
 description = "Mommy's here to support you when running python (in a virtual enviroment)~ ❤️"
 name = "python_mommy_venv"
-dependencies = []
+dependencies = ["toml"]
 authors = []
 readme = "README.md"
 requires-python = ">=3.9"
