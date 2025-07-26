@@ -2,13 +2,12 @@ import random
 import subprocess
 import sys
 from typing import Optional
-import termcolor
 import os
 import re
 import signal
 
 from .config import CONFIG
-from .static import RESPONSES, Situation
+from .static import RESPONSES, Situation, colors
 
 def _expand_template(template: str) -> str:
     for key, value in CONFIG.items():
@@ -27,4 +26,4 @@ def get_response(situation: Situation, colorize: Optional[bool] = None):
     # return message
     if not colorize:
         return message
-    return termcolor.colored(message, attrs=["bold"])
+    return colors.BOLD + message + colors.ENDC
