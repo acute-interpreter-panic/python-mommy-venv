@@ -9,8 +9,7 @@ THIS IS A PORT OF [Gankra/cargo-mommy](https://github.com/Gankra/cargo-mommy)
 
 # TODO
 
-- edit executable in .venv/pyenv.cfg
-- link it to a mommy wrapper
+- make compatibility with https://github.com/Gankra/cargo-mommy/blob/main/responses.json
 
 # Installation
 

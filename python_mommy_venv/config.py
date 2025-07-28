@@ -1,11 +1,11 @@
-from typing import Optional, List
+from typing import Optional, List, Dict
 import os
 from os.path import expandvars
 from sys import platform
 import logging
 from pathlib import Path
-import configparser
 import toml
+import random
 
 from .static import RESPONSES
 
@@ -34,46 +34,61 @@ def _get_var(key: str, fallback: str) -> List[str]:
     return (value or fallback).split("/")
 
 
-_DEFAULT_CONFIG = {key: _get_var(key, value) for key, value in {
-    "MOMMYS_ROLE": "mommy",
-    "MOMMYS_PRONOUNS": "her",
-    "MOMMYS_LITTLE": "girl",
-    "MOMMYS_EMOTES": "❤️/💖/💗/💓/💞",
-    "MOMMYS_PARTS": "milk",
-    "MOMMYS_FUCKING": "slut/toy/pet/pervert/whore",
-    # needs validation
-    "MOMMYS_MOODS": "chill",
-}.items()}
+# env key is just a backup key for compatibility with cargo mommy
+CONFIG = {
+    "mood": {
+        "defaults": ["chill"]
+    },
+    "emote": {
+        "defaults": ["❤️", "💖", "💗", "💓", "💞"]
+    },
+    "pronoun": {
+        "defaults": ["her"]
+    },
+    "role": {
+        "defaults": ["mommy"]
+    },
 
-CONFIG = {}
+    "affectionate_term": {
+        "defaults": ["girl"],
+        "env_key": "LITTLE"
+    },
 
-def load_config(data: Optional[dict] = None):
-    global CONFIG
-    data = data if data is not None else {}
-
-    data = {
-        **_DEFAULT_CONFIG,
-        **data,
+    "denigrating_term": {
+        "spiciness": "yikes",
+        "defaults": ["slut", "toy", "pet", "pervert", "whore"],
+        "env_key": "FUCKING"
+    },
+    "part": {
+        "spiciness": "yikes",
+        "defaults": ["milk"]
     }
+}
 
-    # convert toml keys from snake_case to UPPER_CASE
-    data = {
-        key.upper(): value
-        for key, value in data.items()
-    }
+MOOD_PRIORITIES: Dict[str, int] = {}
+for i, mood in enumerate(RESPONSES):
+    MOOD_PRIORITIES[mood] = i
 
-    # validate needed values
-    unfiltered_moods = data["MOMMYS_MOODS"]
-    data["MOMMYS_MOODS"] = filtered_moods = []
-    for mood in unfiltered_moods:
-        if mood in RESPONSES:
-            filtered_moods.append(mood)
-        else:
-            logger.warning("mood %s isn't supported", mood)
+PREFIXES = [
+    "PYTHON", # first one is always the prefix of the current program
+    "CARGO",
+]
 
-    CONFIG = data
+for key, value in CONFIG.items():
+    env_keys = [
+        PREFIXES[0] + "_MOMMY_" + key.upper(),
+        "MOMMY_" + key.upper(),
+        *(p + "_MOMMY_" + key.upper() for p in PREFIXES)
+    ]
 
-load_config()
+    if value.get("env_key") is not None:
+        env_keys.append(value.get("env_key"))
+
+    for env_key in env_keys:
+        res = os.environ.get(env_key)
+        if res is not None:
+            value["default"] = res.split("/")
+
 
 def _get_xdg_config_dir() -> Path:
     res = os.environ.get("XDG_CONFIG_HOME")
@@ -130,12 +145,18 @@ CONFIG_FILES = [
 ]
 
 def load_config_file(config_file: Path) -> bool:
+    global CONFIG
     if not config_file.exists():
         return False
 
     with config_file.open("r") as f:
         data = toml.load(f)
-        load_config(data=data)
+        
+        for key, value in data.items():
+            if isinstance(value, str):
+                CONFIG[key]["default"] = [value]
+            else:
+                CONFIG[key]["default"] = value
 
     return True
 
@@ -143,3 +164,36 @@ def load_config_file(config_file: Path) -> bool:
 for c in CONFIG_FILES:
     if load_config_file(c):
         break
+
+
+# validate config file
+if True:
+    unfiltered_moods = CONFIG["mood"]["defaults"]
+    CONFIG["mood"]["defaults"] = filtered_moods = []
+    for mood in unfiltered_moods:
+        if mood in RESPONSES:
+            filtered_moods.append(mood)
+        else:
+            logger.warning("mood %s isn't supported", mood)
+
+
+def get_mood() -> str:
+    return random.choice(CONFIG["mood"]["defaults"]) 
+
+def get_template_values(mood: str) -> Dict[str, str]:
+    mood_spice_level = MOOD_PRIORITIES[mood]
+    result = {}
+    
+    for key, value in CONFIG.items():
+        spice = value.get("spiciness")
+        allow_key = spice is None
+        if not allow_key:
+            key_spice_level = MOOD_PRIORITIES[spice]
+            allow_key = mood_spice_level >= key_spice_level
+        
+        if not allow_key:
+            continue
+
+        result[key] = random.choice(value["defaults"])
+
+    return result

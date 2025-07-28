@@ -6,22 +6,18 @@ import os
 import re
 import signal
 
-from .config import CONFIG
+from .config import get_mood, get_template_values
 from .static import RESPONSES, Situation, colors
 
-def _expand_template(template: str) -> str:
-    for key, value in CONFIG.items():
-        template = template.replace(key, random.choice(value))
-
-    return template + " " + random.choice(CONFIG["MOMMYS_EMOTES"])
 
 def get_response(situation: Situation, colorize: Optional[bool] = None):
     if colorize is None:
         colorize = sys.stdout.isatty()
 
     # get message
-    possible_templates = RESPONSES[random.choice(CONFIG["MOMMYS_MOODS"])][situation]
-    message = _expand_template(random.choice(possible_templates))
+    mood = get_mood()
+    template = random.choice(RESPONSES[mood][situation])
+    message = template.format(**get_template_values(mood))
 
     # return message
     if not colorize:
