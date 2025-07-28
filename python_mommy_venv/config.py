@@ -16,23 +16,6 @@ PREFIXES = [
     "CARGO",
 ]
 
-def _get_var(key: str, fallback: str) -> List[str]:
-    value = os.environ.get(
-        PREFIXES[0] + "_" + key,
-        os.environ.get(
-            key,
-            None
-        )
-    )
-
-    if value is None:
-        for prefix in PREFIXES[1:]:
-            value = os.environ.get(prefix + "_" + key, None)
-            if value != None:
-                break
-
-    return (value or fallback).split("/")
-
 
 # env key is just a backup key for compatibility with cargo mommy
 CONFIG = {
@@ -48,12 +31,10 @@ CONFIG = {
     "role": {
         "defaults": ["mommy"]
     },
-
     "affectionate_term": {
         "defaults": ["girl"],
         "env_key": "LITTLE"
     },
-
     "denigrating_term": {
         "spiciness": "yikes",
         "defaults": ["slut", "toy", "pet", "pervert", "whore"],
@@ -154,9 +135,9 @@ def load_config_file(config_file: Path) -> bool:
         
         for key, value in data.items():
             if isinstance(value, str):
-                CONFIG[key]["default"] = [value]
+                CONFIG[key]["defaults"] = [value]
             else:
-                CONFIG[key]["default"] = value
+                CONFIG[key]["defaults"] = value
 
     return True
 
