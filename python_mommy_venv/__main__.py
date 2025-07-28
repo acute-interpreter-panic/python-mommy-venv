@@ -2,8 +2,11 @@ import sys
 from pathlib import Path
 import stat
 
+import toml
+
 from . import get_response
 from .static import Situation
+from .config import CONFIG_FILES, CONFIG_DIRECTORY, generate_current_configuration
 
 
 def development():
@@ -11,8 +14,20 @@ def development():
     if len(sys.argv) > 1:
         s = sys.argv[1]
 
-
     print(get_response(Situation(s)))
+
+def write_current_config():
+    f = "python-mommy.toml"
+    if len(sys.argv) > 1:
+        f = sys.argv[1]
+
+    config_file = CONFIG_DIRECTORY / f
+    print(f"writing to: {config_file}")
+
+    data = toml.dumps(generate_current_configuration())
+    print(data)
+    with config_file.open("w") as f:
+        f.write(data)
 
 
 TEMPLATE = """#!{inner_bin}

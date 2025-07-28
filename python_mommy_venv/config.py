@@ -1,4 +1,4 @@
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Union
 import os
 from os.path import expandvars
 from sys import platform
@@ -119,10 +119,10 @@ def _get_xdg_config_dir() -> Path:
     return default
 
 
-_CONFIG_DIRECTORY = _get_xdg_config_dir() / "mommy"
+CONFIG_DIRECTORY = _get_xdg_config_dir() / "mommy"
 CONFIG_FILES = [
-    _CONFIG_DIRECTORY / "python-mommy.toml",
-    _CONFIG_DIRECTORY / "mommy.toml",
+    CONFIG_DIRECTORY / "python-mommy.toml",
+    CONFIG_DIRECTORY / "mommy.toml",
 ]
 
 def load_config_file(config_file: Path) -> bool:
@@ -178,3 +178,16 @@ def get_template_values(mood: str) -> Dict[str, str]:
         result[key] = random.choice(value["defaults"])
 
     return result
+
+def generate_current_configuration() -> Dict[str, Union[str, List[str]]]:
+    global CONFIG
+    generated = {}
+
+    for key, definition in CONFIG.items():
+        value = definition["defaults"]
+        if len(value) == 1:
+            value = value[0]
+
+        generated[key] = value
+
+    return generated

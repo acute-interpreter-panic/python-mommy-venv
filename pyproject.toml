@@ -15,6 +15,7 @@ license-files = ["LICENSE"]
 
 [project.scripts]
 python-mommy-dev = "python_mommy_venv.__main__:development"
+python-mommy-generate-config = "python_mommy_venv.__main__:write_current_config"
 mommify-venv = "python_mommy_venv.__main__:mommify_venv"
 
 [build-system]
