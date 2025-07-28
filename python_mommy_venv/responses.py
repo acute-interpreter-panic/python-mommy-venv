@@ -5,12 +5,13 @@ import os
 import logging
 import toml
 import random
+import requests
 
 
 logger = logging.Logger(__name__)
 PREFIX = "MOMMY"
 
-
+RESPONSES_URL = "https://raw.githubusercontent.com/diamondburned/go-mommy/refs/heads/main/responses.json"
 RESPONSES_FILE = Path(__file__).parent / "responses.json"
 ADDITIONAL_ENV_VARS = {
     "pronoun": "PRONOUNS",
@@ -116,11 +117,17 @@ def _get_env_value(name: str) -> Optional[str]:
             return val
     
 
-
-def compile_config():
-    global RESPONSES_FILE
+def compile_config(disable_requests: bool = False):
+    global RESPONSES_FILE, RESPONSES_URL
 
     data = json.loads(RESPONSES_FILE.read_text())
+    
+    if not disable_requests:
+        print("mommy downloads newest responses for her girl~")
+        print(RESPONSES_URL)
+        r = requests.get(RESPONSES_URL)
+        data = r.json()
+
     config_definition: Dict[str, dict] = data["vars"]
     mood_definitions: Dict[str, dict] = data["moods"]
 
