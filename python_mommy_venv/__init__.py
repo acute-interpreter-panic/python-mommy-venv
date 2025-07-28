@@ -2,24 +2,33 @@ import random
 import subprocess
 import sys
 from typing import Optional
-import os
-import re
-import signal
+import json
 
-from .config import get_mood, get_template_values
-from .static import RESPONSES, Situation, colors
+from .responses import COMPILED_CONFIG_FILE
+from .static import colors
 
 
-def get_response(situation: Situation, colorize: Optional[bool] = None):
+def get_response_from_situation(situation: str, colorize: Optional[bool] = None):
     if colorize is None:
         colorize = sys.stdout.isatty()
 
     # get message
-    mood = get_mood()
-    template = random.choice(RESPONSES[mood][situation])
-    message = template.format(**get_template_values(mood))
+    config = json.loads(COMPILED_CONFIG_FILE.read_text())
+    existing_moods = list(config["moods"].keys())
+    template_options = config["moods"][random.choice(existing_moods)][situation]
+    template: str = random.choice(template_options)
+
+    template_values = {}
+    for key, values in config["vars"].items():
+        template_values[key] = random.choice(values)
+
+    message = template.format(**template_values)
 
     # return message
     if not colorize:
         return message
     return colors.BOLD + message + colors.ENDC
+
+
+def get_response(code: int, colorize: Optional[bool] = None) -> str:
+    return get_response_from_situation("positive" if code == 0 else "negative")

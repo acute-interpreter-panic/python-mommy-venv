@@ -5,37 +5,21 @@ import stat
 import toml
 
 from . import get_response
-from .static import Situation
-from .config import CONFIG_FILES, CONFIG_DIRECTORY, generate_current_configuration
-
+from .responses import compile_config
 
 def development():
     s = "positive"
     if len(sys.argv) > 1:
         s = sys.argv[1]
 
-    print(get_response(Situation(s)))
+    compile_config()
     
-
-def write_current_config():
-    f = "python-mommy.toml"
-    if len(sys.argv) > 1:
-        f = sys.argv[1]
-
-    config_file = CONFIG_DIRECTORY / f
-    print(f"writing to: {config_file}")
-
-    data = toml.dumps(generate_current_configuration())
-    print(data)
-    with config_file.open("w") as f:
-        f.write(data)
-
 
 WRAPPER_TEMPLATE = """#!{inner_bin}
 # -*- coding: utf-8 -*-
 
 import sys, subprocess
-from python_mommy_venv import get_response, Situation
+from python_mommy_venv import get_response
 
 
 INTERPRETER = "{inner_bin}"
@@ -43,7 +27,7 @@ result = subprocess.run([INTERPRETER] + sys.argv[1:])
 code = result.returncode
 
 print()
-print(get_response(Situation.POSITIVE if code == 0 else Situation.NEGATIVE))
+print(get_response(code))
 exit(code=code)
 """
 
@@ -97,7 +81,10 @@ def mommify_pip(path: Path):
     with path.open("w") as f:
         f.write(text)
 
+
 def mommify_venv():
+    compile_config()
+
     v = ".venv"
     if len(sys.argv) > 1:
         v = sys.argv[1]
