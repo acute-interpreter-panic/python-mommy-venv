@@ -7,6 +7,8 @@ import toml
 import random
 import requests
 
+from .static import get_config_file
+
 
 logger = logging.Logger(__name__)
 PREFIX = "MOMMY"
@@ -20,66 +22,9 @@ ADDITIONAL_ENV_VARS = {
     "mood": "MOODS",
 }
 
-def _get_xdg_config_dir() -> Path:
-    res = os.environ.get("XDG_CONFIG_HOME")
-    if res is not None:
-        return Path(res)
-
-    xdg_user_dirs_file = Path(os.environ.get("XDG_CONFIG_HOME") or Path(Path.home(), ".config", "user-dirs.dirs"))
-    xdg_user_dirs_default_file = Path("/etc/xdg/user-dirs.defaults")
-
-    def get_dir_from_xdg_file(xdg_file_path: Path, key_a: str) -> Optional[str]:
-        if not xdg_file_path.exists():
-            logger.info("config file not found in %s", str(xdg_file_path))
-            return
-
-        with xdg_file_path.open("r") as f:
-            for line in f:
-                if line.startswith("#"):
-                    continue
-
-                parts = line.split("=")
-                if len(parts) > 2:
-                    continue
-
-                key_b = parts[0].lower().strip()
-                value = parts[1].strip().split("#")[0]
-
-                if key_a.lower() == key_b:
-                    return value
-
-        logger.info("key %s not found in %s", key_a, str(xdg_file_path))
-
-    res = get_dir_from_xdg_file(xdg_user_dirs_file, "XDG_CONFIG_HOME")
-    if res is not None:
-        return Path(res)
-
-    res = get_dir_from_xdg_file(xdg_user_dirs_default_file, "CONFIG")
-    if res is not None:
-        return Path(Path.home(), res)
 
 
-    res = get_dir_from_xdg_file(xdg_user_dirs_default_file, "XDG_CONFIG_HOME")
-    if res is not None:
-        return Path(Path.home(), res)
-
-    default = Path(Path.home(), ".config")
-    logging.info("falling back to %s", default)
-    return default
-
-
-CONFIG_DIRECTORY = _get_xdg_config_dir() / "mommy"
-CONFIG_FILES = [
-    CONFIG_DIRECTORY / "python-mommy.toml",
-    CONFIG_DIRECTORY / "mommy.toml",
-]
-COMPILED_CONFIG_FILE = CONFIG_DIRECTORY / "responses.json"
-
-def _load_config_file(config_file: Path) -> Optional[Dict[str, List[str]]]:
-    global CONFIG
-    if not config_file.exists():
-        return None
-
+def _load_config_file(config_file: Path) -> Dict[str, List[str]]:
     with config_file.open("r") as f:
         data = toml.load(f)
         
@@ -117,7 +62,7 @@ def _get_env_value(name: str) -> Optional[str]:
             return val
     
 
-def compile_config(disable_requests: bool = False):
+def compile_config(disable_requests: bool = False) -> dict:
     global RESPONSES_FILE, RESPONSES_URL
 
     data = json.loads(RESPONSES_FILE.read_text())
@@ -125,6 +70,7 @@ def compile_config(disable_requests: bool = False):
     if not disable_requests:
         print("mommy downloads newest responses for her girl~")
         print(RESPONSES_URL)
+        print()
         r = requests.get(RESPONSES_URL)
         data = r.json()
 
@@ -143,15 +89,9 @@ def compile_config(disable_requests: bool = False):
         config[key] = conf["defaults"]
 
     # load config file
-    config_file_data: Optional[Dict[str, List[str]]]
-    for c in CONFIG_FILES:
-        config_file_data = _load_config_file(c)
-        if config_file_data is not None:
-            break
-    
-    if config_file_data is not None:
-        config.update(config_file_data)
-    
+    config_file = get_config_file()
+    if config_file is not None:
+        config.update(_load_config_file(config_file))
 
     # fill config with env
     for key, conf in config_definition.items():
@@ -176,6 +116,4 @@ def compile_config(disable_requests: bool = False):
     del config["mood"]
     compiled_vars.update(config)
 
-    print("writing compiled config to " + str(COMPILED_CONFIG_FILE))
-    with COMPILED_CONFIG_FILE.open("w") as f:
-        json.dump(compiled, f, indent=4)
+    return compiled
