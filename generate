@@ -1,4 +1,4 @@
-#!/home/fname/Projects/OpenSource/python-mommy-venv/.venv/bin/python3
+#!.venv/bin/python3
 import requests
 from pathlib import Path
 import json
