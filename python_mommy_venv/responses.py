@@ -14,7 +14,7 @@ serious_logger = logging.getLogger("serious")
 
 PREFIX = "MOMMY"
 
-RESPONSES_URL = "https://raw.githubusercontent.com/diamondburned/go-mommy/refs/heads/main/responses.json"
+RESPONSES_URL = "https://raw.githubusercontent.com/Gankra/cargo-mommy/refs/heads/main/responses.json"
 RESPONSES_FILE = Path(__file__).parent / "responses.json"
 ADDITIONAL_ENV_VARS = {
     "pronoun": "PRONOUNS",

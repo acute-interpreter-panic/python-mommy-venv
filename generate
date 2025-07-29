@@ -4,7 +4,7 @@ from pathlib import Path
 import json
 
 
-CARGO_MOMMY_DATA = "https://raw.githubusercontent.com/diamondburned/go-mommy/refs/heads/main/responses.json"
+CARGO_MOMMY_DATA = "https://raw.githubusercontent.com/Gankra/cargo-mommy/refs/heads/main/responses.json"
 MODULE_PATH = Path("python_mommy_venv")
 
 
@@ -14,7 +14,7 @@ if __name__ == "__main__":
     res = requests.get(CARGO_MOMMY_DATA)
     if not res.ok:
         raise Exception(f"couldn't fetch {CARGO_MOMMY_DATA} ({res.status_code})")
-    
+
     print(f"writing {Path(MODULE_PATH, 'responses.json')}")
     with Path(MODULE_PATH, "responses.json").open("w") as f:
         json.dump(res.json(), f, indent=4)
