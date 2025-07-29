@@ -152,25 +152,30 @@ def mommify_venv():
     parser.add_argument(
         "-v", "--verbose",
         action="store_true",
-        help="enable verbose output"
+        help="enable verbose and serious output"
+    )
+
+    parser.add_argument(
+        "-l", "--local",
+        action="store_true",
+        help="compile the config only for the current virtual environment"
     )
 
     args = parser.parse_args()
 
     config_logging(args.verbose)
-
     assert_venv()
 
-    compile_local = False
-    compiled_base_dir = VENV_DIRECTORY if compile_local else CONFIG_DIRECTORY
+    compiled_base_dir = VENV_DIRECTORY if args.local else CONFIG_DIRECTORY
     compiled_config_file = compiled_base_dir / COMPILED_CONFIG_FILE_NAME
-
     compiled = compile_config()
     mommy_logger.info("mommy writes its moods in %s", compiled_config_file)
     serious_logger.info("writing compiled config file to %s", compiled_config_file)
     compiled_base_dir.mkdir(parents=True, exist_ok=True)
     with compiled_config_file.open("w") as f:
         json.dump(compiled, f, indent=4)
+    if not args.local:
+        (VENV_DIRECTORY / COMPILED_CONFIG_FILE_NAME).unlink(missing_ok=True)
 
     mommy_logger.info("")
 
