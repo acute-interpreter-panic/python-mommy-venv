@@ -19,7 +19,7 @@ log_level = logging.INFO
 mommy_logger = logging.getLogger("mommy")
 mommy_logger.setLevel(logging.INFO)
 serious_logger = logging.getLogger("serious")
-serious_logger.setLevel(logging.WARNING)
+serious_logger.setLevel(50)
 
 
 def config_logging(verbose: bool):
@@ -29,7 +29,7 @@ def config_logging(verbose: bool):
             force=True,
         )
         logging.getLogger().setLevel(logging.DEBUG)
-        mommy_logger.setLevel(logging.ERROR)
+        mommy_logger.setLevel(50)
         serious_logger.setLevel(logging.DEBUG)
 
 
