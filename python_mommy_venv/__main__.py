@@ -31,14 +31,6 @@ def config_logging(verbose: bool):
         logging.getLogger().setLevel(logging.DEBUG)
         mommy_logger.setLevel(50)
         serious_logger.setLevel(logging.DEBUG)
-
-
-def development():
-    s = "positive"
-    if len(sys.argv) > 1:
-        s = sys.argv[1]
-
-    compile_config()
     
 
 WRAPPER_TEMPLATE = """#!{inner_bin}
