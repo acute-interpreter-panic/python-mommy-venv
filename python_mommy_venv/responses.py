@@ -28,7 +28,7 @@ ADDITIONAL_ENV_VARS = {
 def _load_config_file(config_file: Path) -> Dict[str, List[str]]:
     with config_file.open("r") as f:
         data = toml.load(f)
-        
+
         result = {}
         for key, value in data.items():
             if isinstance(value, str):
@@ -43,7 +43,7 @@ ADDITIONAL_PROGRAM_PREFIXES = [
     "cargo",    # only as fallback if user already configured cargo
 ]
 
-def _get_env_var_names(name: str): 
+def _get_env_var_names(name: str):
     BASE = PREFIX + "_" + name.upper()
     yield "PYTHON_" + BASE
     yield BASE
@@ -56,23 +56,27 @@ def _get_env_value(name: str) -> Optional[str]:
             val = os.environ.get(key)
             if val is not None:
                 return val
-    
+
     for key in _get_env_var_names(name):
         val = os.environ.get(key)
         if val is not None:
             return val
-    
+
 
 def compile_config(disable_requests: bool = False) -> dict:
     global RESPONSES_FILE, RESPONSES_URL
 
     data = json.loads(RESPONSES_FILE.read_text())
-    
+
     if not disable_requests:
         mommy_logger.info("mommy downloads newest responses for her girl~ %s", RESPONSES_URL)
         serious_logger.info("downloading cargo mommy responses: %s", RESPONSES_URL)
-        r = requests.get(RESPONSES_URL)
-        data = r.json()
+        try:
+            r = requests.get(RESPONSES_URL)
+            data = r.json()
+        except requests.exceptions.ConnectionError:
+            mommy_logger.info("mommy couldn't fetch the url~")
+            serious_logger.info("couldnt fetch the url")
 
     config_definition: Dict[str, dict] = data["vars"]
     mood_definitions: Dict[str, dict] = data["moods"]

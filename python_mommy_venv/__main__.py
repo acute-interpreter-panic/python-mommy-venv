@@ -8,6 +8,7 @@ import argparse
 
 from .responses import compile_config
 from .static import IS_VENV, VENV_DIRECTORY, CONFIG_DIRECTORY, COMPILED_CONFIG_FILE_NAME
+from ntpath import devnull
 
 logging.basicConfig(
     format='%(message)s',
@@ -108,12 +109,11 @@ def write_compile_config(local: bool):
         (VENV_DIRECTORY / COMPILED_CONFIG_FILE_NAME).unlink(missing_ok=True)
 
 
-def wrap_interpreter(path: Path):
+def wrap_interpreter(path: Path, symlink_target: Path):
     mommy_logger.info("mommy found a symlink to an interpreter~ %s", str(path))
     serious_logger.info("interpreter symlink found at %s", str(path))
 
     inner_symlink = path.parent / ("inner_" + path.name)
-    symlink_target = path.resolve()
 
     if inner_symlink.exists():
         raise Exception("inner symlink somehow already exists. This shouldn't happen because of prior checks")
@@ -203,6 +203,11 @@ def mommify_venv():
 
     mommy_logger.info("mommy looks in %s to mess your system up~ <33", str(bin_path))
     serious_logger.info("scanning binary directory of venv at %s", str(bin_path))
+    
+    resolved_symlinks = {}
+    for path in list(bin_path.iterdir()):
+        if path.is_symlink():
+            resolved_symlinks[path.name] = path.resolve()
 
     for path in list(bin_path.iterdir()):
         name = path.name
@@ -213,10 +218,10 @@ def mommify_venv():
             if name.startswith("inner_"):
                 continue
             
-            if subprocess.run([str(path), '-c', '"exit(0)"']).returncode != 0:
+            if subprocess.run([str(path), '-c', '"exit(0)"'], stdout=sys.devnull).returncode != 0:
                 continue
 
-            wrap_interpreter(path)
+            wrap_interpreter(path, resolved_symlinks[path.name])
 
         else:
             # could be pip
