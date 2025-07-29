@@ -14,6 +14,7 @@ version = "0.0.0"
 license-files = ["LICENSE"]
 
 [project.scripts]
+mommify-venv-compile = "python_mommy_venv.__main__:cli_compile_config"
 mommify-venv = "python_mommy_venv.__main__:mommify_venv"
 
 [build-system]
