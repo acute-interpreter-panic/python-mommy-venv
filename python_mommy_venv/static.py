@@ -73,19 +73,27 @@ def _get_xdg_config_dir() -> Path:
 CONFIG_DIRECTORY = _get_xdg_config_dir() / "mommy"
 COMPILED_CONFIG_FILE_NAME = "compiled-mommy.json"
 
+IS_VENV = sys.prefix != sys.base_prefix
+VENV_DIRECTORY = Path(sys.prefix)
+
 def get_config_file() -> Optional[Path]:
-    config_files = [
+    config_files = []
+    if IS_VENV:
+        config_files.extend([
+            VENV_DIRECTORY / "python-mommy.toml",
+            VENV_DIRECTORY / "mommy.toml",
+        ])
+    config_files.extend([
         CONFIG_DIRECTORY / "python-mommy.toml",
         CONFIG_DIRECTORY / "mommy.toml",
-    ]
+    ])
 
     for f in config_files:
         if f.exists():
             return f
 
 
-IS_VENV = sys.prefix != sys.base_prefix
-VENV_DIRECTORY = Path(sys.prefix)
+
 
 def get_compiled_config_file() -> Path:
     compiled_config_files = [
