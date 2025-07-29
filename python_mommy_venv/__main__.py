@@ -4,8 +4,8 @@ import stat
 import subprocess
 import logging
 import json
+import argparse
 
-from . import get_response
 from .responses import compile_config
 from .static import IS_VENV, VENV_DIRECTORY, CONFIG_DIRECTORY, COMPILED_CONFIG_FILE_NAME
 
@@ -20,6 +20,17 @@ mommy_logger = logging.getLogger("mommy")
 mommy_logger.setLevel(logging.INFO)
 serious_logger = logging.getLogger("serious")
 serious_logger.setLevel(logging.WARNING)
+
+
+def config_logging(verbose: bool):
+    if verbose:
+        logging.basicConfig(
+            format=logging.BASIC_FORMAT,
+            force=True,
+        )
+        logging.getLogger().setLevel(logging.DEBUG)
+        mommy_logger.setLevel(logging.ERROR)
+        serious_logger.setLevel(logging.DEBUG)
 
 
 def development():
@@ -135,8 +146,19 @@ def install_pip_hook(path: Path):
         f.write(text)
 
 
-
 def mommify_venv():
+    parser = argparse.ArgumentParser(description="patch the virtual environment to use mommy")
+    
+    parser.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help="enable verbose output"
+    )
+
+    args = parser.parse_args()
+
+    config_logging(args.verbose)
+
     assert_venv()
 
     compile_local = False
@@ -150,7 +172,6 @@ def mommify_venv():
     with compiled_config_file.open("w") as f:
         json.dump(compiled, f, indent=4)
 
-    serious_logger.info("")
     mommy_logger.info("")
 
     bin_path = VENV_DIRECTORY / "bin"
