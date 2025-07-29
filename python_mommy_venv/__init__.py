@@ -1,10 +1,6 @@
 import random
-import subprocess
 import sys
 from typing import Optional
-import os
-import re
-import signal
 
 from .config import get_mood, get_template_values
 from .static import RESPONSES, Situation, colors
