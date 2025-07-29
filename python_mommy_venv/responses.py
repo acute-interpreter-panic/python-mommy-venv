@@ -9,8 +9,9 @@ import requests
 
 from .static import get_config_file
 
+mommy_logger = logging.getLogger("mommy")
+serious_logger = logging.getLogger("serious")
 
-logger = logging.Logger(__name__)
 PREFIX = "MOMMY"
 
 RESPONSES_URL = "https://raw.githubusercontent.com/diamondburned/go-mommy/refs/heads/main/responses.json"
@@ -68,9 +69,8 @@ def compile_config(disable_requests: bool = False) -> dict:
     data = json.loads(RESPONSES_FILE.read_text())
     
     if not disable_requests:
-        print("mommy downloads newest responses for her girl~")
-        print(RESPONSES_URL)
-        print()
+        mommy_logger.info("mommy downloads newest responses for her girl~ %s", RESPONSES_URL)
+        serious_logger.info("downloading cargo mommy responses: %s", RESPONSES_URL)
         r = requests.get(RESPONSES_URL)
         data = r.json()
 
@@ -103,7 +103,18 @@ def compile_config(disable_requests: bool = False) -> dict:
     for mood in config["mood"]:
         if mood not in mood_definitions:
             supported_moods_str = ", ".join(mood_definitions.keys())
-            print(f"{random.choice(config['role'])} doesn't know how to feel {mood}... {random.choice(config['pronoun'])} moods are {supported_moods_str}")
+            mommy_logger.error(
+                "%s doesn't know how to feel %s... %s moods are %s",
+                random.choice(config['role']),
+                mood,
+                random.choice(config['pronoun']),
+                supported_moods_str,
+            )
+            serious_logger.error(
+                "mood '%s' doesn't exist. moods are %s",
+                mood,
+                supported_moods_str,
+            )
             exit(1)
 
     # compile

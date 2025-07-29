@@ -3,14 +3,14 @@ from pathlib import Path
 import stat
 import subprocess
 import logging
-
-import toml
+import json
 
 from . import get_response
 from .responses import compile_config
+from .static import IS_VENV, VENV_DIRECTORY, CONFIG_DIRECTORY, COMPILED_CONFIG_FILE_NAME
 
 logging.basicConfig(
-    format=' %(message)s',
+    format='%(message)s',
     force=True,
 )
 
@@ -130,13 +130,21 @@ def install_pip_hook(path: Path):
 
 
 def mommify_venv():
-    compile_config()
+    compile_local = False
+    compiled_base_dir = VENV_DIRECTORY if compile_local else CONFIG_DIRECTORY
+    compiled_config_file = compiled_base_dir / COMPILED_CONFIG_FILE_NAME
 
-    v = ".venv"
-    if len(sys.argv) > 1:
-        v = sys.argv[1]
+    compiled = compile_config()
+    mommy_logger.info("mommy writes its moods in %s", compiled_config_file)
+    serious_logger.info("writing compiled config file to %s", compiled_config_file)
+    compiled_base_dir.mkdir(parents=True, exist_ok=True)
+    with compiled_config_file.open("w") as f:
+        json.dump(compiled, f, indent=4)
 
-    bin_path = Path(v, "bin")
+    serious_logger.info("")
+    mommy_logger.info("")
+
+    bin_path = VENV_DIRECTORY / "bin"
     bin_path = bin_path.resolve()
 
     mommy_logger.info("mommy looks in %s to mess your system up~ <33", str(bin_path))
@@ -148,10 +156,10 @@ def mommify_venv():
         if path.is_symlink():
             # could be python interpreter
             # check for both just to be more expressive
-            if name.startswith("inner_") or not name.startswith("python"):
+            if name.startswith("inner_"):
                 continue
             
-            if subprocess.run([str(path), '-c', '"exit()"']) != 0:
+            if subprocess.run([str(path), '-c', '"exit(0)"']).returncode != 0:
                 continue
 
             wrap_interpreter(path)
@@ -162,6 +170,3 @@ def mommify_venv():
                 continue
 
             install_pip_hook(path)
-
-        serious_logger.info("")
-        mommy_logger.info("")

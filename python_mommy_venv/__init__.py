@@ -3,8 +3,7 @@ import sys
 from typing import Optional
 import json
 
-from .responses import COMPILED_CONFIG_FILE
-from .static import colors
+from .static import colors, get_compiled_config_file
 
 
 def get_response_from_situation(situation: str, colorize: Optional[bool] = None):
@@ -12,7 +11,7 @@ def get_response_from_situation(situation: str, colorize: Optional[bool] = None)
         colorize = sys.stdout.isatty()
 
     # get message
-    config = json.loads(COMPILED_CONFIG_FILE.read_text())
+    config = json.loads(get_compiled_config_file().read_text())
     existing_moods = list(config["moods"].keys())
     template_options = config["moods"][random.choice(existing_moods)][situation]
     template: str = random.choice(template_options)

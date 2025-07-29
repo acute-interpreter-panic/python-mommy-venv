@@ -4,6 +4,7 @@ from pathlib import Path
 import os
 import logging
 from typing import Optional
+import sys
 
 
 logger = logging.Logger(__name__)
@@ -81,3 +82,19 @@ def get_config_file() -> Optional[Path]:
     for f in config_files:
         if f.exists():
             return f
+
+
+IS_VENV = sys.prefix != sys.base_prefix
+VENV_DIRECTORY = Path(sys.prefix)
+
+def get_compiled_config_file() -> Path:
+    compiled_config_files = [
+        VENV_DIRECTORY / "compiled-mommy.json",
+        CONFIG_DIRECTORY / "compiled-mommy.json",
+    ]
+
+    for f in compiled_config_files:
+        if f.exists():
+            return f
+        
+    raise Exception("couldn't find compiled config file")
