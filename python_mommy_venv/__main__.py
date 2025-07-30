@@ -94,12 +94,12 @@ def assert_venv(only_warn: bool = False):
             exit(1)
 
 
-def write_compile_config(local: bool):
+def write_compile_config(local: bool, disable_requests: bool = False):
     assert_venv(only_warn=not local)
 
     compiled_base_dir = VENV_DIRECTORY if local else CONFIG_DIRECTORY
     compiled_config_file = compiled_base_dir / COMPILED_CONFIG_FILE_NAME
-    compiled = compile_config()
+    compiled = compile_config(disable_requests=disable_requests)
     mommy_logger.info("mommy writes its moods in %s", compiled_config_file)
     serious_logger.info("writing compiled config file to %s", compiled_config_file)
     compiled_base_dir.mkdir(parents=True, exist_ok=True)
@@ -169,10 +169,16 @@ def cli_compile_config():
         help="compile the config only for the current virtual environment"
     )
 
+    parser.add_argument(
+        "-r", "--no-requests",
+        action="store_true",
+        help="by default if makes one request to GitHub to fetch the newest responses, this disables that"
+    )
+
     args = parser.parse_args()
 
     config_logging(args.verbose)
-    write_compile_config(args.local)
+    write_compile_config(args.local, disable_requests=args.no_requests)
 
 
 def mommify_venv():
@@ -188,6 +194,12 @@ def mommify_venv():
         "-l", "--local",
         action="store_true",
         help="compile the config only for the current virtual environment"
+    )
+
+    parser.add_argument(
+        "-r", "--no-requests",
+        action="store_true",
+        help="by default if makes one request to GitHub to fetch the newest responses, this disables that"
     )
 
     args = parser.parse_args()
