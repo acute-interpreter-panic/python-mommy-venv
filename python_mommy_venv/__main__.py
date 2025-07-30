@@ -224,8 +224,9 @@ def mommify_venv():
             # check for both just to be more expressive
             if name.startswith("inner_"):
                 continue
-
-            if subprocess.run([str(path), '-c', '"exit(0)"']).returncode != 0:
+            
+            RANDOM_RETURNCODE = 161
+            if subprocess.run([str(path), '-c', f'exit({RANDOM_RETURNCODE})']).returncode != RANDOM_RETURNCODE:
                 continue
 
             wrap_interpreter(path, resolved_symlinks[path.name])
