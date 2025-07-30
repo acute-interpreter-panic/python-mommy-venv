@@ -103,6 +103,23 @@ def compile_config(disable_requests: bool = False) -> dict:
         if val is not None:
             config[key] = val.split("/")
 
+    # validate empty variables
+    empty_values = []
+    for key, value in config.items():
+        if len(value) == 0:
+            empty_values.append(key)
+    if len(empty_values) > 0:
+        empty_values_sting = ", ".join(empty_values)
+        mommy_logger.error(
+            "mommy is very displeased that you didn't config the key(s) %s",
+            empty_values_sting,
+        )
+        serious_logger.error(
+            "the following keys have empty values and need to be configured: %s",
+            empty_values_sting
+        )
+        exit(1)
+
     # validate moods
     for mood in config["mood"]:
         if mood not in mood_definitions:
