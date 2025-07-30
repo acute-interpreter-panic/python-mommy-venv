@@ -103,7 +103,14 @@ def compile_config(disable_requests: bool = False) -> dict:
         )
 
         config["mood"] = c.get("moods", config["mood"])
-        config.update(c.get("vars", {}))
+        c_vars: dict = c.get("vars", {})
+        # validate the config var values
+        for key, val in c_vars.items():
+            if not isinstance(val, list):
+                mommy_logger.error("mommy needs the value of %s to be a list~", key)
+                serious_logger.error("the value of %s is not a list", key)
+                exit(1)
+        config.update(c_vars)
 
     # fill config with env
     for key, conf in config_definition.items():
