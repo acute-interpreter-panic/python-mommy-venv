@@ -204,10 +204,17 @@ def mommify_venv():
     mommy_logger.info("mommy looks in %s to mess your system up~ <33", str(bin_path))
     serious_logger.info("scanning binary directory of venv at %s", str(bin_path))
 
-    resolved_symlinks = {}
-    for path in list(bin_path.iterdir()):
-        if path.is_symlink():
-            resolved_symlinks[path.name] = path.resolve()
+    # resolving the symlinks before making edits to anything because else it will mess up the resolving
+    # and link to the wrapper instead of the original script
+    resolved_symlinks = {
+        path.name: path.resolve()
+        for path in bin_path.iterdir()
+        if path.is_symlink()
+    }
+    serious_logger.debug("resolved symlinks:\n%s", "\n".join(
+        f"\t{name} => {str(target)}"
+        for name, target in resolved_symlinks.items()
+    ))
 
     for path in list(bin_path.iterdir()):
         name = path.name
