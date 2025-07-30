@@ -25,7 +25,7 @@ ADDITIONAL_ENV_VARS = {
 
 
 
-def _load_config_file(config_file: Path) -> Dict[str, List[str]]:
+def _load_config_file(config_file: Path) -> dict:
     with config_file.open("r") as f:
         data = toml.load(f)
 
@@ -95,7 +95,15 @@ def compile_config(disable_requests: bool = False) -> dict:
     # load config file
     config_file = get_config_file()
     if config_file is not None:
-        config.update(_load_config_file(config_file))
+        c = _load_config_file(config_file)
+        serious_logger.debug(
+            "config at %s:\n%s\n",
+            config_file,
+            json.dumps(c, indent=4)
+        )
+
+        config["mood"] = c.get("moods", config["mood"])
+        config.update(c.get("vars", {}))
 
     # fill config with env
     for key, conf in config_definition.items():

@@ -171,6 +171,7 @@ def cli_compile_config():
 
     args = parser.parse_args()
 
+    config_logging(args.verbose)
     write_compile_config(args.local)
 
 
