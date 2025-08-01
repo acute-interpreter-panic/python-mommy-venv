@@ -41,7 +41,7 @@ You need to make sure `python-mommy-venv` is installed in your virtual environme
 
 To patch the virtual env you can run the following command. Look at `mommify-venv -h` for more options.
 
-```sh
+```
 mommify-venv  
 ```
 
@@ -71,6 +71,23 @@ what a good girl you are~
 $ python doesnt_exist.py .venv/bin/inner_python: can't open file 'doesnt_exist.py': [Errno 2] No such file or directory
 
 don't forget to hydrate~
+```
+
+## Daddy
+
+If you want mommy to call you daddy and never wanna touch mommy at all, then this program provides the following commands:
+
+```sh
+daddify-venv
+daddify-venv-compile
+```
+
+This will set the default values to daddy instead of mommy, but will still be overwritten by config files or environment variables, if either of those are set.
+
+The `--you` argument works the exact way, but you can tell mommy/daddy how to call you. The default is `girl`:
+
+```
+daddify-venv --you boy
 ```
 
 # Configuration
