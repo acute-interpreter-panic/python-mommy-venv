@@ -99,7 +99,7 @@ def assert_venv(only_warn: bool = False):
             exit(1)
 
 
-def write_compile_config(local: bool, disable_requests: bool = False):
+def write_compile_config(local: bool, disable_requests: bool = False, dry: bool = False):
     assert_venv(only_warn=not local)
 
     compiled_base_dir = VENV_DIRECTORY if local else CONFIG_DIRECTORY
@@ -108,10 +108,11 @@ def write_compile_config(local: bool, disable_requests: bool = False):
     mommy_logger.info("writes its moods in %s", compiled_config_file)
     serious_logger.info("writing compiled config file to %s", compiled_config_file)
     compiled_base_dir.mkdir(parents=True, exist_ok=True)
-    with compiled_config_file.open("w") as f:
-        json.dump(compiled, f, indent=4)
-    if not local:
-        (VENV_DIRECTORY / COMPILED_CONFIG_FILE_NAME).unlink(missing_ok=True)
+    if not dry:
+        with compiled_config_file.open("w") as f:
+            json.dump(compiled, f, indent=4)
+        if not local:
+            (VENV_DIRECTORY / COMPILED_CONFIG_FILE_NAME).unlink(missing_ok=True)
 
 
 def wrap_interpreter(path: Path, symlink_target: Path):
@@ -159,7 +160,7 @@ def install_pip_hook(path: Path):
         f.write(text)
 
 
-def cli_compile_config(is_mommy: bool = True):
+def cli_compile_config(is_mommy: bool = True, dry: bool = False):
     MOMMY.set_roles(is_mommy)
 
     parser = argparse.ArgumentParser(description="only recompile the config")
@@ -174,6 +175,12 @@ def cli_compile_config(is_mommy: bool = True):
         "-l", "--local",
         action="store_true",
         help="compile the config only for the current virtual environment"
+    )
+
+    parser.add_argument(
+        "--dry",
+        action="store_true",
+        help="just... dry run"
     )
 
     parser.add_argument(
@@ -194,11 +201,11 @@ def cli_compile_config(is_mommy: bool = True):
 
     MOMMY.YOU = args.you
     config_logging(args.verbose)
-    write_compile_config(args.local, disable_requests=args.no_requests)
+    write_compile_config(args.local, disable_requests=args.no_requests, dry=dry or args.dry)
 
 
-def daddy_cli_compile_config():
-    return cli_compile_config(is_mommy=False)
+def daddy_cli_compile_config(dry: bool = False):
+    return cli_compile_config(is_mommy=False, dry=dry)
 
 
 def mommify_venv(is_mommy: bool = True):
