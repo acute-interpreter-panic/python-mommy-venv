@@ -1,55 +1,61 @@
-# pythonmommy
+# `python-mommy-venv`
 
-[View on PyPI](https://pypi.org/project/pythonmommy/)
-[Github repo](https://github.com/Def-Try/python-mommy)
+![publishing workflow](https://github.com/hazel-noack/mysql-quote-identifiers/actions/workflows/python-publish.yml/badge.svg)
 
 Mommy's here to support you when running python~ ❤️
 
-THIS IS A PORT OF [Gankra/cargo-mommy](https://github.com/Gankra/cargo-mommy)
+`python-mommy-venv` tries to be as compatible with [`cargo-mommy`](https://github.com/Gankra/cargo-mommy). It used some code from [`python-mommy`](https://github.com/Def-Try/python-mommy) as starting point. The execution is completely different as it was very flawed, and the configuration is way different to make greater compatibility with `cargo-mommy`. For more information check the section [why not `python-mommy`](#why-not-python-mommy).
 
-# TODO
+# ToDo
 
-- make compatibility with https://github.com/Gankra/cargo-mommy/blob/main/responses.json
+- Add `python-mommy-vibe` to support vibrators
 
 # Installation
 
-Install python-mommy like you would any other python package~
+You can `pip install python-mommy-venv`~
 
-```text
-> pip install pythonmommy
+```sh
+pip install python-mommy-venv
 ```
 
 # Usage
 
-Run whatever python you would normally but add "-m python_mommy" after python~
+## Concept you should know
 
-```text
-> cat hello.py
+If you work with python there are many things you might need hinder mommy from running explicitly. For example:
 
-print("Hello, world"
+- installing a local project with the `-e` flag and running the generated command
+- running any python module 
+- installing a package with `pip`
 
-> python -m python_mommy hello.py
+They all have something in common, they call the python interpreter. So mommy's approach was to wrap the interpreter. However if mommy would do this globally, she would break many systems like Debian that rely on python~
 
-File "/home/little_girl/hello.py", line 1
-    print("Hello, world"
-         ^
-SyntaxError: '(' was never closed
+So what mommy does, is patch the virtual environment you (hopefully) run the python packages you develop in. 
 
-mommy knows her little girl can do better~ ❤️
+## Actually using the tool
 
->_
+You need to make sure `python-mommy-venv` is installed in your virtual environment. Else mommy can't find the directory to patch~ 
+
+To patch the virtual env you can run the following command. Look at `mommify-venv -h` for more options.
+
+```sh
+mommify-venv  
 ```
 
-You can alias mommy directly to python if you want,
+Mommy will fetch the new responses from `cargo-mommy`, if you don't want her to you can turn it of.
+She will then compile a config file with the parameters defined in the [configuration section](#configuration) and the fetched responses.
 
-```text
-> alias python="python -m python_mommy"
+If you want to change the config, you can run, and mommy will recompile the config with the updated environment:
+
+```
+mommify-venv-compile
 ```
 
 # Configuration
 
-if you don't use standard interpreter, you can set it with environment variable `PYTHON_MOMMYS_INTERPRETER`. default is "python/python3/py", and `/` symbol separates different interpreters that mommy will try to find, from first to last.
-prepend `\` before `/` to escape it, for example `\/home\/user\/.local\/bin\/python/python/python3`
+## Environment Variable
+
+_this is mainly implemented to get compatibility to `cargo-mommy`_
 
 Mommy will read the following environment variables to make her messages better for you~ ❤️
 
@@ -70,6 +76,32 @@ So if you set `PYTHON_MOMMYS_ROLES="daddy"`, `PYTHON_MOMMYS_PRONOUNS="his/their"
 
 And so on~ 💓
 
+## Config file
+
+The you can write a config file in the following locations:
+
+- `~/.config/mommy/mommy.toml`
+- `~/.config/mommy/python-mommy.toml`
+
+The general mommy config file is supposed to be used by other mommies, but up to this point there is no mommy that supports that.
+
+Mommy reads toml and here is an example of the config file with the default config.
+
+```toml
+moods = ["chill"]
+
+[vars]
+role = ["mommy"]
+emote = ["❤️", "💖", "💗", "💓", "💞"]
+pronoun = ["her"]
+affectionate_term = ['girl']
+denigrating_term = ['slut', 'toy', 'pet', 'pervert', 'whore']
+part = ['milk']
+```
+
+In the moods you can select which responses you can get, and under vars you can define what mommy would fill in the blanks.
+
+To check what moods and vars mommy currently supports, look at [this file in `cargo-mommy`](https://github.com/Gankra/cargo-mommy/blob/main/responses.json).
 
 # Configuration (kink)
 
@@ -123,6 +155,8 @@ get on your knees and beg mommy for forgiveness you pervert~ 💗
 mommy is starting to wonder if you should just give up and become her breeding stock~ 💗
 
 </details>
+
+# Why not `python-mommy`
 
 # Licensing
 mommy likes freedom~ ❤️, and is licensed under [MIT](LICENSE-MIT).
