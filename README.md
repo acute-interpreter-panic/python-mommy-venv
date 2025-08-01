@@ -1,6 +1,6 @@
 # `python-mommy-venv`
 
-![publishing workflow](https://github.com/hazel-noack/mysql-quote-identifiers/actions/workflows/python-publish.yml/badge.svg)
+![publishing workflow](https://github.com/acute-interpreter-panic/python-mommy-venv/actions/workflows/python-publish.yml/badge.svg)
 
 Mommy's here to support you when running python~ ❤️
 
