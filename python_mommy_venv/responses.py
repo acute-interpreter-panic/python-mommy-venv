@@ -69,13 +69,13 @@ def compile_config(disable_requests: bool = False) -> dict:
     data = json.loads(RESPONSES_FILE.read_text())
 
     if not disable_requests:
-        mommy_logger.info("mommy downloads newest responses for her girl~ %s", RESPONSES_URL)
-        serious_logger.info("downloading cargo mommy responses: %s", RESPONSES_URL)
+        mommy_logger.info("downloads newest responses for her girl~ %s", RESPONSES_URL)
+        serious_logger.info("downloading cargo-mommy's responses: %s", RESPONSES_URL)
         try:
             r = requests.get(RESPONSES_URL)
             data = r.json()
         except requests.exceptions.ConnectionError:
-            mommy_logger.info("mommy couldn't fetch the url~")
+            mommy_logger.info("couldn't fetch the url~")
             serious_logger.info("couldnt fetch the url")
 
     config_definition: Dict[str, dict] = data["vars"]
@@ -107,7 +107,7 @@ def compile_config(disable_requests: bool = False) -> dict:
         # validate the config var values
         for key, val in c_vars.items():
             if not isinstance(val, list):
-                mommy_logger.error("mommy needs the value of %s to be a list~", key)
+                mommy_logger.error("needs the value of %s to be a list~", key)
                 serious_logger.error("the value of %s is not a list", key)
                 exit(1)
         config.update(c_vars)
@@ -126,7 +126,7 @@ def compile_config(disable_requests: bool = False) -> dict:
     if len(empty_values) > 0:
         empty_values_sting = ", ".join(empty_values)
         mommy_logger.error(
-            "mommy is very displeased that you didn't config the key(s) %s",
+            "is very displeased that you didn't config the key(s) %s",
             empty_values_sting,
         )
         serious_logger.error(
@@ -140,7 +140,7 @@ def compile_config(disable_requests: bool = False) -> dict:
         if mood not in mood_definitions:
             supported_moods_str = ", ".join(mood_definitions.keys())
             mommy_logger.error(
-                "mommy doesn't know how to feel %s... %s moods are %s",
+                "doesn't know how to feel %s... %s moods are %s",
                 mood,
                 random.choice(config['pronoun']),
                 supported_moods_str,
