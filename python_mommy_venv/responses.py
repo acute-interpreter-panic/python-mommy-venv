@@ -140,8 +140,7 @@ def compile_config(disable_requests: bool = False) -> dict:
         if mood not in mood_definitions:
             supported_moods_str = ", ".join(mood_definitions.keys())
             mommy_logger.error(
-                "%s doesn't know how to feel %s... %s moods are %s",
-                random.choice(config['role']),
+                "mommy doesn't know how to feel %s... %s moods are %s",
                 mood,
                 random.choice(config['pronoun']),
                 supported_moods_str,
