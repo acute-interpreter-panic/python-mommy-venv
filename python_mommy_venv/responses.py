@@ -7,7 +7,7 @@ import toml
 import random
 import requests
 
-from .static import get_config_file
+from .static import get_config_file, MOMMY
 
 mommy_logger = logging.getLogger("mommy")
 serious_logger = logging.getLogger("serious")
@@ -69,7 +69,7 @@ def compile_config(disable_requests: bool = False) -> dict:
     data = json.loads(RESPONSES_FILE.read_text())
 
     if not disable_requests:
-        mommy_logger.info("downloads newest responses for her girl~ %s", RESPONSES_URL)
+        mommy_logger.info("downloads newest responses for %s girl~ %s", MOMMY.PRONOUN, RESPONSES_URL)
         serious_logger.info("downloading cargo-mommy's responses: %s", RESPONSES_URL)
         try:
             r = requests.get(RESPONSES_URL)

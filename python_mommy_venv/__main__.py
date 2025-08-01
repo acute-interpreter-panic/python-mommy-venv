@@ -7,7 +7,7 @@ import json
 import argparse
 
 from .responses import compile_config
-from .static import IS_VENV, VENV_DIRECTORY, CONFIG_DIRECTORY, COMPILED_CONFIG_FILE_NAME
+from .static import IS_VENV, VENV_DIRECTORY, CONFIG_DIRECTORY, COMPILED_CONFIG_FILE_NAME, MOMMY
 from ntpath import devnull
 
 logging.basicConfig(
@@ -32,6 +32,11 @@ def config_logging(verbose: bool):
         logging.getLogger().setLevel(logging.DEBUG)
         mommy_logger.setLevel(50)
         serious_logger.setLevel(logging.DEBUG)
+    else:
+        logging.basicConfig(
+            format=f'{MOMMY.NAME} %(message)s',
+            force=True,
+        )
 
 
 WRAPPER_TEMPLATE = """#!{inner_bin}
@@ -154,7 +159,9 @@ def install_pip_hook(path: Path):
         f.write(text)
 
 
-def cli_compile_config():
+def cli_compile_config(is_mommy: bool = True):
+    MOMMY.set_roles(is_mommy)
+
     parser = argparse.ArgumentParser(description="only recompile the config")
 
     parser.add_argument(
@@ -181,7 +188,13 @@ def cli_compile_config():
     write_compile_config(args.local, disable_requests=args.no_requests)
 
 
-def mommify_venv():
+def daddy_cli_compile_config():
+    return cli_compile_config(is_mommy=False)
+
+
+def mommify_venv(is_mommy: bool = True):
+    MOMMY.set_roles(is_mommy)
+
     parser = argparse.ArgumentParser(description="patch the virtual environment to use mommy")
 
     parser.add_argument(
@@ -248,3 +261,7 @@ def mommify_venv():
                 continue
 
             install_pip_hook(path)
+
+
+def daddify_venv():
+    return mommify_venv(is_mommy=False)

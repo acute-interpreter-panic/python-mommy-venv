@@ -10,6 +10,31 @@ import sys
 logger = logging.Logger(__name__)
 
 
+class MOMMY:
+    NAME = "mommy"
+    PRONOUN = "her"
+
+    @classmethod
+    def set_roles(cls, is_mommy: bool):
+        if is_mommy:
+            cls.NAME = "mommy"
+            cls.PRONOUN = "her"
+        else:
+            cls.NAME = "daddy"
+            cls.PRONOUN = "his"
+
+
+def set_mommy_roles(is_mommy: bool):
+    global MOMMY_NAME, MOMMY_PRONOUN
+    print(is_mommy)
+
+    if is_mommy:
+        MOMMY_NAME = "mommy"
+        MOMMY_PRONOUN = "her"
+    else:
+        MOMMY_NAME = "daddy"
+        MOMMY_PRONOUN = "his"
+
 class colors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -91,8 +116,6 @@ def get_config_file() -> Optional[Path]:
     for f in config_files:
         if f.exists():
             return f
-
-
 
 
 def get_compiled_config_file() -> Path:
