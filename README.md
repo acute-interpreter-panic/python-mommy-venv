@@ -138,7 +138,7 @@ Good pet~ ❤️
 
 All of mommy's NSFW content is hidden behind PYTHON_MOMMYS_MOODS, where "thirsty" is heavy teasing/flirting and "yikes" is full harsh dommy mommy kink~
 
-You can enable "true mommy chaos mode" by setting `PYTHON_MOMMYS_MOODS="chill/thirsty/yikes"`, making mommy oscillate wildly between light positive affirmation and trying to break you in half~
+You can enable "true mommy chaos mode" by setting `PYTHON_MOMMYS_MOODS="chill/thirsty/yikes"` or by editing the `moods` field in the config, making mommy oscillate wildly between light positive affirmation and trying to break you in half~
 
 * `PYTHON_MOMMYS_MOODS` - how kinky mommy will be~ (default: "chill", possible values "chill", "thirsty", "yikes")
 * `PYTHON_MOMMYS_PARTS` - what part of mommy you should crave~ (default: "milk")
