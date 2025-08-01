@@ -1,5 +1,5 @@
 [project]
-description = "Mommy's here to support you when running python (in a virtual enviroment)~ ❤️"
+description = "Mommy's here to support you when running python~ ❤️ [rewrite of python-mommy] [compatible with cargo-mommy]"
 name = "python_mommy_venv"
 dependencies = ["toml", "requests"]
 authors = [
