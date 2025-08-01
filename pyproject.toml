@@ -12,7 +12,7 @@ classifiers = [
     'License :: OSI Approved :: MIT License',
     'Operating System :: OS Independent',
 ]
-version = "0.0.0"
+version = "0.0.1"
 license-files = ["LICENSE"]
 
 [project.urls]
