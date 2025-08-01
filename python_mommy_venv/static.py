@@ -11,16 +11,16 @@ logger = logging.Logger(__name__)
 
 
 class MOMMY:
-    NAME = "mommy"
+    ROLE = "mommy"
     PRONOUN = "her"
 
     @classmethod
     def set_roles(cls, is_mommy: bool):
         if is_mommy:
-            cls.NAME = "mommy"
+            cls.ROLE = "mommy"
             cls.PRONOUN = "her"
         else:
-            cls.NAME = "daddy"
+            cls.ROLE = "daddy"
             cls.PRONOUN = "his"
 
 

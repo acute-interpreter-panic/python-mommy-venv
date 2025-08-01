@@ -88,9 +88,14 @@ def compile_config(disable_requests: bool = False) -> dict:
             ADDITIONAL_ENV_VARS[key] = conf["env_key"]
 
     # set config to the default values
+    defaults_override = {
+        "pronoun": [MOMMY.PRONOUN],
+        "role": [MOMMY.ROLE],
+    }
     config: Dict[str, List[str]] = {}
     for key, conf in config_definition.items():
         config[key] = conf["defaults"]
+    config.update(defaults_override)
 
     # load config file
     config_file = get_config_file()

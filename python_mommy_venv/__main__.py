@@ -34,7 +34,7 @@ def config_logging(verbose: bool):
         serious_logger.setLevel(logging.DEBUG)
     else:
         logging.basicConfig(
-            format=f'{MOMMY.NAME} %(message)s',
+            format=f'{MOMMY.ROLE} %(message)s',
             force=True,
         )
 
