@@ -1,4 +1,4 @@
-name: "build and publish mommy~"
+name: "mommy builds and publishes~"
 
 on: push
 
