@@ -1,6 +1,7 @@
 # `python-mommy-venv`
 
-![publishing workflow](https://github.com/acute-interpreter-panic/python-mommy-venv/actions/workflows/python-publish.yml/badge.svg)
+[![PyPi version](https://img.shields.io/pypi/v/python-mommy-venv)](https://pypi.org/project/python-mommy-venv/)
+[![publishing workflow](https://github.com/acute-interpreter-panic/python-mommy-venv/actions/workflows/python-publish.yml/badge.svg)](https://github.com/acute-interpreter-panic/python-mommy-venv/actions)
 
 Mommy's here to support you when running python~ ❤️
 
@@ -8,7 +9,7 @@ Mommy's here to support you when running python~ ❤️
 
 # buttplug.io integration
 
-I really want to add `python-vibe` and integrate it into this project. This should make mommy support [buttplug.io](https://buttplug.io/). Unfortunately I am currently in a really bad place monetarily and don't own a device to test this on.
+I really want to integrate buttplug.io with [`buttplug-py`](https://github.com/Siege-Wizard/buttplug-py) into this project. This should make mommy support [buttplug.io](https://buttplug.io/). Unfortunately I am currently in a really bad place monetarily and don't own a device to test this on.
 
 So if you want to see this implemented or just want to improve the day of a fellow trans girl, shoot me a mail at [acute_interpreter_panic@proton.me](mailto:acute_interpreter_panic@proton.me) and then you can buy me one. Of course I will update it once I got my hands on a... device
 
