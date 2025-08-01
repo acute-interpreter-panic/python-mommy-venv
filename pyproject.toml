@@ -2,7 +2,9 @@
 description = "Mommy's here to support you when running python (in a virtual enviroment)~ ❤️"
 name = "python_mommy_venv"
 dependencies = ["toml", "requests"]
-authors = []
+authors = [
+    {name = "Acute Interpreter Panic", email = "acute_interpreter_panic@proton.me"},
+]
 readme = "README.md"
 requires-python = ">=3.9"
 classifiers = [
@@ -12,6 +14,10 @@ classifiers = [
 ]
 version = "0.0.0"
 license-files = ["LICENSE"]
+
+[project.urls]
+Homepage = "https://github.com/acute-interpreter-panic/python-mommy-venv"
+Issues = "https://github.com/acute-interpreter-panic/python-mommy-venv/issues"
 
 [project.scripts]
 mommify-venv-compile = "python_mommy_venv.__main__:cli_compile_config"
