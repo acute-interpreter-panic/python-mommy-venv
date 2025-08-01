@@ -6,9 +6,11 @@ Mommy's here to support you when running python~ ❤️
 
 `python-mommy-venv` tries to be as compatible with [`cargo-mommy`](https://github.com/Gankra/cargo-mommy). It used some code from [`python-mommy`](https://github.com/Def-Try/python-mommy) as starting point. The execution is completely different as it was very flawed, and the configuration is way different to make greater compatibility with `cargo-mommy`. For more information check the section [why not `python-mommy`](#why-not-python-mommy).
 
-# ToDo
+# buttplug.io integration
 
-- Add `python-mommy-vibe` to support vibrators
+I really want to add `python-vibe` and integrate it into this project. This should make mommy support [buttplug.io](https://buttplug.io/). Unfortunately I am currently in a really bad place monetarily and don't own a device to test this on.
+
+So if you want to see this implemented or just want to improve the day of a fellow trans girl, shoot me a mail at [acute_interpreter_panic@proton.me](mailto:acute_interpreter_panic@proton.me) and then you can buy me one.
 
 # Installation
 
