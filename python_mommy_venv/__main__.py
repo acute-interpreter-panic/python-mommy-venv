@@ -128,7 +128,7 @@ def wrap_interpreter(path: Path, symlink_target: Path):
     path.unlink()
 
     # creating the wrapper string
-    mommy_logger.info("mommy writes wrapper script as %s", Path)
+    mommy_logger.info("mommy writes wrapper script as %s", path)
     serious_logger.info("writing wrapper script at %s", path)
     with path.open("w") as f:
         f.write(WRAPPER_TEMPLATE.format(inner_bin=str(inner_symlink)))
