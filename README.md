@@ -51,6 +51,25 @@ If you want to change the config, you can run, and mommy will recompile the conf
 mommify-venv-compile
 ```
 
+Here are examples of mommy responding to you~
+
+```sh
+$ pip install requests
+Requirement already satisfied: requests in ./.venv/lib/python3.10/site-packages (2.32.4)
+[...]
+
+mommy loves you~
+
+$ python test.py
+Hello World
+
+what a good girl you are~
+
+$ python doesnt_exist.py .venv/bin/inner_python: can't open file 'doesnt_exist.py': [Errno 2] No such file or directory
+
+don't forget to hydrate~
+```
+
 # Configuration
 
 ## Environment Variable
