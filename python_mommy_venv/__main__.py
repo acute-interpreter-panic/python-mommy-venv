@@ -177,6 +177,14 @@ def cli_compile_config(is_mommy: bool = True):
     )
 
     parser.add_argument(
+        '--you', 
+        type=str, 
+        default='girl', 
+        nargs='?',
+        help='how do you want mommy to call you? The default is girl~'
+    )
+
+    parser.add_argument(
         "-r", "--no-requests",
         action="store_true",
         help="by default if makes one request to GitHub to fetch the newest responses, this disables that"
@@ -184,6 +192,7 @@ def cli_compile_config(is_mommy: bool = True):
 
     args = parser.parse_args()
 
+    MOMMY.YOU = args.you
     config_logging(args.verbose)
     write_compile_config(args.local, disable_requests=args.no_requests)
 
@@ -210,6 +219,15 @@ def mommify_venv(is_mommy: bool = True):
     )
 
     parser.add_argument(
+        '--you', 
+        type=str, 
+        default='girl', 
+        nargs='?',
+        help='how do you want mommy to call you?'
+    )
+
+
+    parser.add_argument(
         "-r", "--no-requests",
         action="store_true",
         help="by default if makes one request to GitHub to fetch the newest responses, this disables that"
@@ -217,6 +235,7 @@ def mommify_venv(is_mommy: bool = True):
 
     args = parser.parse_args()
 
+    MOMMY.YOU = args.you
     config_logging(args.verbose)
     assert_venv()
 
