@@ -177,5 +177,13 @@ mommy is starting to wonder if you should just give up and become her breeding s
 
 # Why not `python-mommy`
 
+`python-mommy` has to be explicitly run by running `python -m python_mommy test.py` which won't work in real life scenarios. Read the [concept section](#concept-you-should-know) if you want to know why.
+
+`python-mommy` has many minor improvements that should be made. Those all aren't really bad but they add up.
+
+`python-mommy` wasn't updated for one year. That means the responses are way to outdated, and also don't automatically update.
+
+The last two reasons can be easily fixed, but the first one requires a complete rewrite.... which `python-mommy-venv` is.
+
 # Licensing
 mommy likes freedom~ ❤️, and is licensed under [MIT](LICENSE-MIT).
