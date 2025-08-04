@@ -1,4 +1,4 @@
 import time
 
-time.sleep(.1)
-print("success")
+print("running meow.py")
+time.sleep(0)

@@ -35,14 +35,15 @@ def get_response_from_situation(situation: str, colorize: Optional[bool] = None,
     if colorize:
         message = colors.BOLD + message + colors.ENDC
 
+    prefix = ""
     if config["advanced"]["print_time"]:
-        message = f"[{context.execution_time}ms] " + message
+        prefix = f"[{context.execution_time}ms] "
     
     if config["advanced"]["print_mommy_time"]:
         t_difference = round((time.time() - context.mommy_start_time) * 1000)
-        message = f"[{t_difference}ms] " + message
+        prefix = f"[{t_difference}ms] "
 
-    return message
+    return prefix + message.replace("\n", "\n" + " " * len(prefix))
 
 def get_response(code: int, colorize: Optional[bool] = None, context: Optional[Context] = None) -> str:
     return get_response_from_situation("positive" if code == 0 else "negative", colorize=colorize, context=context)
