@@ -3,8 +3,8 @@ import sys
 from typing import Optional
 import json
 
-from .responses import compile_config
-from .static import colors, get_compiled_config_file
+from .config import load_config
+from .static import colors
 
 
 def get_response_from_situation(situation: str, colorize: Optional[bool] = None, compile: bool = False):
@@ -12,10 +12,7 @@ def get_response_from_situation(situation: str, colorize: Optional[bool] = None,
         colorize = sys.stdout.isatty()
 
     # get message
-    if compile:
-        config = compile_config(disable_requests=True)
-    else:
-        config = json.loads(get_compiled_config_file().read_text())
+    config = load_config(disable_requests=True)
     existing_moods = list(config["moods"].keys())
     template_options = config["moods"][random.choice(existing_moods)][situation]
     template: str = random.choice(template_options)

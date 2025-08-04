@@ -1,12 +1,16 @@
 [project]
 description = "Mommy's here to support you when running python~ ❤️ [rewrite of python-mommy] [compatible with cargo-mommy]"
 name = "python_mommy_venv"
-dependencies = ["toml", "requests"]
+dependencies = [
+    "toml", 
+    "requests",
+    "xdg-base-dirs"
+]
 authors = [
     {name = "Acute Interpreter Panic", email = "acute_interpreter_panic@proton.me"},
 ]
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
     'Programming Language :: Python :: 3',
     'License :: OSI Approved :: MIT License',

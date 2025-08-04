@@ -6,7 +6,7 @@ import json
 import argparse
 
 from . import main
-from .responses import compile_config
+from .config import load_config
 from .static import IS_VENV, VENV_DIRECTORY, CONFIG_DIRECTORY, COMPILED_CONFIG_FILE_NAME, MOMMY
 from ntpath import devnull
 
@@ -104,7 +104,7 @@ def _write_compile_config(local: bool, disable_requests: bool = False):
 
     compiled_base_dir = VENV_DIRECTORY if local else CONFIG_DIRECTORY
     compiled_config_file = compiled_base_dir / COMPILED_CONFIG_FILE_NAME
-    compiled = compile_config(disable_requests=disable_requests)
+    compiled = load_config(disable_requests=disable_requests)
     mommy_logger.info("writes its moods in %s", compiled_config_file)
     serious_logger.info("writing compiled config file to %s", compiled_config_file)
     compiled_base_dir.mkdir(parents=True, exist_ok=True)
@@ -171,12 +171,6 @@ def mommify_venv(is_mommy: bool = True):
     )
 
     parser.add_argument(
-        "-l", "--local",
-        action="store_true",
-        help="compile the config only for the current virtual environment"
-    )
-
-    parser.add_argument(
         '--you', 
         type=str, 
         default='girl', 
@@ -196,8 +190,6 @@ def mommify_venv(is_mommy: bool = True):
     MOMMY.YOU = args.you
     _config_logging(args.verbose)
     _assert_venv()
-
-    _write_compile_config(args.local)
 
     bin_path = VENV_DIRECTORY / "bin"
     bin_path = bin_path.resolve()

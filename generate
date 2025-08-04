@@ -1,4 +1,4 @@
-#!.venv/bin/python3
+#!.venv/bin/inner_python3
 import requests
 from pathlib import Path
 import json
@@ -15,6 +15,9 @@ if __name__ == "__main__":
     if not res.ok:
         raise Exception(f"couldn't fetch {CARGO_MOMMY_DATA} ({res.status_code})")
 
+    data = res.json()
+    data["etag"] = res.headers["etag"]
+
     print(f"writing {Path(MODULE_PATH, 'responses.json')}")
     with Path(MODULE_PATH, "responses.json").open("w") as f:
-        json.dump(res.json(), f, indent=4)
+        json.dump(data, f, indent=4)

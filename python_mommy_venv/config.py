@@ -63,7 +63,7 @@ def _get_env_value(name: str) -> Optional[str]:
             return val
 
 
-def compile_config(disable_requests: bool = False) -> dict:
+def load_config(disable_requests: bool = False) -> dict:
     global RESPONSES_FILE, RESPONSES_URL
 
     data = json.loads(RESPONSES_FILE.read_text())
