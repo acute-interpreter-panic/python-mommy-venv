@@ -24,18 +24,6 @@ class MOMMY:
             cls.ROLE = "daddy"
             cls.PRONOUN = "his"
 
-
-def set_mommy_roles(is_mommy: bool):
-    global MOMMY_NAME, MOMMY_PRONOUN
-    print(is_mommy)
-
-    if is_mommy:
-        MOMMY_NAME = "mommy"
-        MOMMY_PRONOUN = "her"
-    else:
-        MOMMY_NAME = "daddy"
-        MOMMY_PRONOUN = "his"
-
 class colors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
