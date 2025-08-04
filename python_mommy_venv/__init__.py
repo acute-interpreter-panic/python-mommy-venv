@@ -30,3 +30,7 @@ def get_response_from_situation(situation: str, colorize: Optional[bool] = None)
 
 def get_response(code: int, colorize: Optional[bool] = None) -> str:
     return get_response_from_situation("positive" if code == 0 else "negative")
+
+
+def main():
+    print("hi")

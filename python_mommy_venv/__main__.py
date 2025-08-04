@@ -1,4 +1,3 @@
-import sys
 from pathlib import Path
 import stat
 import subprocess
@@ -6,6 +5,7 @@ import logging
 import json
 import argparse
 
+from . import main
 from .responses import compile_config
 from .static import IS_VENV, VENV_DIRECTORY, CONFIG_DIRECTORY, COMPILED_CONFIG_FILE_NAME, MOMMY
 from ntpath import devnull
@@ -284,3 +284,19 @@ def mommify_venv(is_mommy: bool = True):
 
 def daddify_venv():
     return mommify_venv(is_mommy=False)
+
+
+# run as module
+if __name__ == "__main__":
+    # credits to the original project
+    # https://github.com/Def-Try/python-mommy/blob/main/python_mommy/__init__.py
+    import sys, subprocess
+    from . import get_response
+
+    proc = subprocess.run([
+        sys.executable,
+        *sys.argv[1:],
+    ])
+
+    print("")
+    print(get_response(proc.returncode))
