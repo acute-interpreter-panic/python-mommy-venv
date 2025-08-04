@@ -1,4 +1,4 @@
-from python_mommy_venv import mommy
+from python_mommy import mommy
 
 
 if __name__ == "__main__":

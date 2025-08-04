@@ -25,10 +25,8 @@ Homepage = "https://github.com/acute-interpreter-panic/python-mommy-venv"
 Issues = "https://github.com/acute-interpreter-panic/python-mommy-venv/issues"
 
 [project.scripts]
-mommify-venv-compile = "python_mommy_venv.__main__:cli_compile_config"
-daddify-venv-compile = "python_mommy_venv.__main__:daddy_cli_compile_config"
-mommify-venv = "python_mommy_venv.__main__:mommify_venv"
-daddify-venv = "python_mommy_venv.__main__:daddify_venv"
+mommify-venv = "python_mommy.__main__:mommify_venv"
+daddify-venv = "python_mommy.__main__:daddify_venv"
 
 [build-system]
 requires = ["hatchling", "hatch-requirements-txt"]
@@ -38,4 +36,8 @@ build-backend = "hatchling.build"
 directory = "dist"
 
 [tool.hatch.build.targets.wheel]
-packages = ["python_mommy_venv"]
+packages = [
+    "python_mommy",
+    "mommy",
+    "daddy",
+]
