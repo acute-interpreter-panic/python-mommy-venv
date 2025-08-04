@@ -96,7 +96,8 @@ def load_config(disable_requests: bool = False) -> structure.Config:
         if mood not in config["moods"]:
             supported_moods_str = ", ".join(config["moods"].keys())
             mommy_logger.error(
-                "doesn't know how to feel %s... %s moods are %s",
+                "%s doesn't know how to feel %s... %s moods are %s",
+                MOMMY.ROLE,
                 mood,
                 MOMMY.PRONOUN,
                 supported_moods_str,
@@ -120,7 +121,10 @@ def load_config(disable_requests: bool = False) -> structure.Config:
     if len(empty_values) > 0:
         empty_values_sting = ", ".join(empty_values)
         mommy_logger.error(
-            "is very displeased that you didn't config the key(s) %s",
+            "%s is very displeased that %s %s didn't config the key(s) %s",
+            MOMMY.ROLE,
+            MOMMY.PRONOUN,
+            MOMMY.YOU,
             empty_values_sting,
         )
         serious_logger.error(

@@ -48,7 +48,7 @@ def get_response(code: int, colorize: Optional[bool] = None, context: Optional[C
     return get_response_from_situation("positive" if code == 0 else "negative", colorize=colorize, context=context)
 
 
-def main():
+def mommy():
     # credits to the original project
     # https://github.com/Def-Try/python-mommy/blob/main/python_mommy/__init__.py
     import sys, subprocess
