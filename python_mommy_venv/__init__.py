@@ -21,7 +21,7 @@ def get_response_from_situation(situation: str, colorize: Optional[bool] = None,
         colorize = sys.stdout.isatty()
 
     # get message
-    config = load_config(disable_requests=True)
+    config = load_config(disable_requests=False)
     existing_moods = list(config["moods"].keys())
     template_options = config["moods"][random.choice(existing_moods)][situation]
     template: str = random.choice(template_options)

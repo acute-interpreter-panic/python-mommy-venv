@@ -52,7 +52,6 @@ def load_responses(disable_requests: bool = False) -> structure.Responses:
     _p: Path = xdg_cache_home() / "mommy"
     _p.mkdir(exist_ok=True)
 
-
     responses_file = _p / "responses.json"
 
     if not responses_file.exists():
