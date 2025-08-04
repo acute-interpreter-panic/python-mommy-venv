@@ -288,15 +288,4 @@ def daddify_venv():
 
 # run as module
 if __name__ == "__main__":
-    # credits to the original project
-    # https://github.com/Def-Try/python-mommy/blob/main/python_mommy/__init__.py
-    import sys, subprocess
-    from . import get_response
-
-    proc = subprocess.run([
-        sys.executable,
-        *sys.argv[1:],
-    ])
-
-    print("")
-    print(get_response(proc.returncode))
+    main()
