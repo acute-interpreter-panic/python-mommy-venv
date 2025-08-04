@@ -114,7 +114,7 @@ def _write_compile_config(local: bool, disable_requests: bool = False):
         (VENV_DIRECTORY / COMPILED_CONFIG_FILE_NAME).unlink(missing_ok=True)
 
 
-def wrap_interpreter(path: Path, symlink_target: Path):
+def _wrap_interpreter(path: Path, symlink_target: Path):
     mommy_logger.info("found a symlink to an interpreter~ %s", str(path))
     serious_logger.info("interpreter symlink found at %s", str(path))
 
@@ -230,7 +230,7 @@ def mommify_venv(is_mommy: bool = True):
             if subprocess.run([str(path), '-c', f'exit({RANDOM_RETURNCODE})']).returncode != RANDOM_RETURNCODE:
                 continue
 
-            wrap_interpreter(path, resolved_symlinks[path.name])
+            _wrap_interpreter(path, resolved_symlinks[path.name])
 
         else:
             # could be pip
