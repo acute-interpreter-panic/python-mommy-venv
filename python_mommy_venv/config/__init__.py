@@ -54,6 +54,8 @@ def load_config(disable_requests: bool = False) -> structure.Config:
         env_var_mapping[name].append(name.upper())
 
     # actually load env vars
-
+    for name, definition in var_definitions.items():
+        for env_key in env_var_mapping[name]:
+            for env_var_name
 
     return config
