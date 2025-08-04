@@ -31,18 +31,22 @@ def _get_env_value(env_keys: List[str]) -> Optional[List[str]]:
                 return r.split("/")
 
 
-@lru_cache(maxsize=None)
 def load_config(disable_requests: bool = False) -> structure.Config:
     config: structure.Config = {
         "moods":    {},
         "vars":     {},
         "advanced": {
             "print_time": False,
-            "print_mommy_time": False
+            "print_mommy_time": False,
+            "disable_requests": False,
         },
     }
 
-    responses = _u.load_responses(disable_requests=disable_requests)
+    config_file = _u.load_config_file()
+    if config_file is not None:
+        config["advanced"].update(config_file.get("advanced", {}))
+
+    responses = _u.load_responses(disable_requests=config["advanced"]["disable_requests"])
     # mood can just be copied
     config["moods"] = responses["moods"]
     # vars actually define the config
@@ -80,13 +84,11 @@ def load_config(disable_requests: bool = False) -> structure.Config:
             config["vars"][name] = res
 
     # config file
-    config_file = _u.load_config_file()
     if config_file is not None:
         if "moods" in config_file:
             config["vars"]["mood"] = config_file["moods"]
         config["vars"].update(config_file.get("vars", {}))
-        config["advanced"].update(config_file.get("advanced", {}))
-
+        
     # validate
     # moods
     selected_moods = config["vars"].pop("mood")

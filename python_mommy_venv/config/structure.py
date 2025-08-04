@@ -3,6 +3,7 @@ from typing_extensions import NotRequired
 
 
 class Advanced(TypedDict):
+    disable_requests: bool
     print_time: bool
     print_mommy_time: bool
 
@@ -28,6 +29,7 @@ class Responses(TypedDict):
 class ConfigFileAdvanced(TypedDict):
     print_time: NotRequired[bool]
     print_mommy_time: NotRequired[bool]
+    disable_requests: NotRequired[bool]
 
 
 class ConfigFile(TypedDict):
