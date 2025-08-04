@@ -3,6 +3,7 @@ from collections.abc import Iterable
 from typing import DefaultDict, List, Optional
 import os
 import logging
+from functools import lru_cache
 
 from . import structure
 from . import utils as _u
@@ -30,11 +31,14 @@ def _get_env_value(env_keys: List[str]) -> Optional[List[str]]:
                 return r.split("/")
 
 
-
+@lru_cache(maxsize=None)
 def load_config(disable_requests: bool = False) -> structure.Config:
     config: structure.Config = {
         "moods":    {},
         "vars":     {},
+        "advanced": {
+            "print_time": False
+        },
     }
 
     responses = _u.load_responses(disable_requests=disable_requests)
@@ -80,6 +84,7 @@ def load_config(disable_requests: bool = False) -> structure.Config:
         if "moods" in config_file:
             config["vars"]["mood"] = config_file["moods"]
         config["vars"].update(config_file.get("vars", {}))
+        config["advanced"].update(config_file.get("advanced", {}))
 
     # validate
     # moods

@@ -15,7 +15,7 @@ from . import structure
 
 
 def _get_config_files() -> Iterator[Path]:
-    file_names = ("mommy.toml", "python-mommy.toml")
+    file_names = ("python-mommy.toml", "mommy.toml")
 
     # check if mommy runs in venv
     if sys.prefix != sys.base_prefix:
