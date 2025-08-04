@@ -37,11 +37,11 @@ def get_response_from_situation(situation: str, colorize: Optional[bool] = None,
 
     prefix = ""
     if config["advanced"]["print_time"]:
-        prefix = f"[{context.execution_time}ms] "
+        prefix += f"[{context.execution_time}ms] "
     
     if config["advanced"]["print_mommy_time"]:
         t_difference = round((time.time() - context.mommy_start_time) * 1000)
-        prefix = f"[{t_difference}ms] "
+        prefix += f"[{t_difference}ms] "
 
     return prefix + message.replace("\n", "\n" + " " * len(prefix))
 
