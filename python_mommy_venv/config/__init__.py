@@ -37,7 +37,8 @@ def load_config(disable_requests: bool = False) -> structure.Config:
         "moods":    {},
         "vars":     {},
         "advanced": {
-            "print_time": False
+            "print_time": False,
+            "print_mommy_time": False
         },
     }
 

@@ -4,6 +4,7 @@ from typing_extensions import NotRequired
 
 class Advanced(TypedDict):
     print_time: bool
+    print_mommy_time: bool
 
 
 class Config(TypedDict):
@@ -26,6 +27,7 @@ class Responses(TypedDict):
 
 class ConfigFileAdvanced(TypedDict):
     print_time: NotRequired[bool]
+    print_mommy_time: NotRequired[bool]
 
 
 class ConfigFile(TypedDict):

@@ -25,7 +25,7 @@ def get_response_from_situation(situation: str, colorize: Optional[bool] = None)
 
     message = template.format(**template_values)
 
-    if config["advanced"]["print_time"]:
+    if config["advanced"]["print_mommy_time"]:
         t_difference = int((time.time() - start_time) * 1000)
         message = f"[{t_difference}ms] " + message
 
