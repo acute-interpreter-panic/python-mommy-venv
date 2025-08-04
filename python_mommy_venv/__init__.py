@@ -2,13 +2,20 @@ import random
 import sys
 from typing import Optional
 import time
+from dataclasses import dataclass
 
 from .config import load_config
 from .static import colors
 
 
-def get_response_from_situation(situation: str, colorize: Optional[bool] = None):
-    start_time = time.time()
+@dataclass
+class Context:
+    mommy_start_time: float = 0
+    execution_time: int = 0
+
+
+def get_response_from_situation(situation: str, colorize: Optional[bool] = None, context: Optional[Context] = None):
+    context = context if context is not None else Context()
 
     if colorize is None:
         colorize = sys.stdout.isatty()
@@ -25,18 +32,20 @@ def get_response_from_situation(situation: str, colorize: Optional[bool] = None)
 
     message = template.format(**template_values)
 
+    if colorize:
+        message = colors.BOLD + message + colors.ENDC
+
+    if config["advanced"]["print_time"]:
+        message = f"[{context.execution_time}ms] " + message
+    
     if config["advanced"]["print_mommy_time"]:
-        t_difference = int((time.time() - start_time) * 1000)
+        t_difference = round((time.time() - context.mommy_start_time) * 1000)
         message = f"[{t_difference}ms] " + message
 
-    # return message
-    if not colorize:
-        return message
-    return colors.BOLD + message + colors.ENDC
+    return message
 
-
-def get_response(code: int, colorize: Optional[bool] = None) -> str:
-    return get_response_from_situation("positive" if code == 0 else "negative", colorize=colorize)
+def get_response(code: int, colorize: Optional[bool] = None, context: Optional[Context] = None) -> str:
+    return get_response_from_situation("positive" if code == 0 else "negative", colorize=colorize, context=context)
 
 
 def main():
@@ -46,11 +55,15 @@ def main():
     import time
     from . import get_response
 
+    context = Context()
+
+    prev_time = time.time()
     proc = subprocess.run([
         sys.executable,
         *sys.argv[1:],
     ])
+    context.mommy_start_time = time.time()
+    context.execution_time = round((time.time() - prev_time) * 1000)
 
-    prev_time = time.time()
     print("")
-    print(get_response(proc.returncode))
+    print(get_response(proc.returncode, context=context))
