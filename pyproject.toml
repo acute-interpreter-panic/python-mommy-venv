@@ -4,7 +4,8 @@ name = "python_mommy_venv"
 dependencies = [
     "toml", 
     "requests",
-    "xdg-base-dirs"
+    "xdg-base-dirs",
+    "typing_extensions",
 ]
 authors = [
     {name = "Acute Interpreter Panic", email = "acute_interpreter_panic@proton.me"},
