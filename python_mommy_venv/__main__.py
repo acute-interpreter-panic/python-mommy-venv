@@ -7,7 +7,7 @@ import argparse
 
 from . import main
 from .config import load_config
-from .static import IS_VENV, VENV_DIRECTORY, CONFIG_DIRECTORY, COMPILED_CONFIG_FILE_NAME, MOMMY
+from .static import IS_VENV, VENV_DIRECTORY, CONFIG_DIRECTORY, MOMMY
 from ntpath import devnull
 
 logging.basicConfig(

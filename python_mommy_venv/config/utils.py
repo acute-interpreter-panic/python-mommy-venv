@@ -6,6 +6,7 @@ import sys
 from collections.abc import Iterator
 import requests
 import json
+import toml
 
 from xdg_base_dirs import xdg_config_home, xdg_cache_home
 
@@ -27,16 +28,25 @@ def _get_config_files() -> Iterator[Path]:
         yield Path(name)
 
     # files in .config directory
-    base_dir = xdg_config_home / "mommy"
+    base_dir = xdg_config_home() / "mommy"
     for name in file_names:
             yield base_dir / name
 
 
-def get_config_file() -> Optional[Path]:
+def _get_config_file() -> Optional[Path]:
     for possible in _get_config_files():
         if possible.exists():
             return possible
         
+
+def load_config_file() -> Optional[structure.ConfigFile]:
+    file = _get_config_file()
+    if file is None:
+        return None
+    
+    with file.open("r") as f:
+        return toml.load(f)
+
 
 def load_responses(disable_requests: bool = False) -> structure.Responses:
     _p: Path = xdg_cache_home() / "mommy"

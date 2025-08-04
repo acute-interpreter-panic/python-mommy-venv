@@ -73,6 +73,52 @@ def load_config(disable_requests: bool = False) -> structure.Config:
         res = _get_env_value(env_var_mapping[name])
         if res is not None:
             config["vars"][name] = res
-                
+
+    # config file
+    config_file = _u.load_config_file()
+    if config_file is not None:
+        if "moods" in config_file:
+            config["vars"]["mood"] = config_file["moods"]
+        config["vars"].update(config_file.get("vars", {}))
+
+    # validate
+    # moods
+    selected_moods = config["vars"].pop("mood")
+    for mood in selected_moods:
+        if mood not in config["moods"]:
+            supported_moods_str = ", ".join(config["moods"].keys())
+            mommy_logger.error(
+                "doesn't know how to feel %s... %s moods are %s",
+                mood,
+                MOMMY.PRONOUN,
+                supported_moods_str,
+            )
+            serious_logger.error(
+                "mood '%s' doesn't exist. moods are %s",
+                mood,
+                supported_moods_str,
+            )
+            exit(1)
+    config["moods"] = {
+        key: value
+        for key, value in config["moods"].items()
+        if key in selected_moods
+    }
+    # empty vars
+    empty_values = []
+    for key, value in config["vars"].items():
+        if len(value) == 0:
+            empty_values.append(key)
+    if len(empty_values) > 0:
+        empty_values_sting = ", ".join(empty_values)
+        mommy_logger.error(
+            "is very displeased that you didn't config the key(s) %s",
+            empty_values_sting,
+        )
+        serious_logger.error(
+            "the following keys have empty values and need to be configured: %s",
+            empty_values_sting
+        )
+        exit(1)
 
     return config
