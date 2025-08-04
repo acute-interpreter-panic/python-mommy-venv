@@ -1,6 +1,8 @@
 from collections import defaultdict
 from collections.abc import Iterable
-from typing import DefaultDict, List
+from typing import DefaultDict, List, Optional
+import os
+import logging
 
 from . import structure
 from . import utils as _u
@@ -8,12 +10,25 @@ from . import utils as _u
 from ..static import MOMMY
 
 
-def _env_names_from_key(key: str) -> Iterable[str]:
-    base = "MOMMY_" + key.upper()
+mommy_logger = logging.getLogger("mommy")
+serious_logger = logging.getLogger("serious")
 
-    yield "PYTHON_" + base
-    yield base
-    yield "CARGO_" + base
+
+def _env_names_from_key(key: str) -> Iterable[str]:
+    for m in ("MOMMY", "DADDY"):
+        base = m + "_" + key.upper()
+        yield "PYTHON_" + base
+        yield base
+        yield "CARGO_" + base
+
+
+def _get_env_value(env_keys: List[str]) -> Optional[List[str]]:
+    for key in env_keys:
+        for var in _env_names_from_key(key):
+            r = os.getenv(var)
+            if r is not None:
+                return r.split("/")
+
 
 
 def load_config(disable_requests: bool = False) -> structure.Config:
@@ -55,7 +70,9 @@ def load_config(disable_requests: bool = False) -> structure.Config:
 
     # actually load env vars
     for name, definition in var_definitions.items():
-        for env_key in env_var_mapping[name]:
-            for env_var_name
+        res = _get_env_value(env_var_mapping[name])
+        if res is not None:
+            config["vars"][name] = res
+                
 
     return config
