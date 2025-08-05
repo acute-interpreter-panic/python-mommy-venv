@@ -6,7 +6,7 @@ import argparse
 from . import mommy
 from .config import load_config
 from .static import MOMMY
-from .mommify import legacy_mommify
+from .mommify import legacy_mommify, mommify
 
 log_level = logging.INFO
 
@@ -55,14 +55,23 @@ def mommify_venv(is_mommy: bool = True):
         help="by default if makes one request to GitHub to fetch the newest responses, this disables that"
     )
 
+    parser.add_argument(
+        "--legacy",
+        action="store_true",
+        help="Currently it will add aliases in the selected source file, in legacy mode it will directly wrap the symlinks to the interpreter of the venv in a wrapper script."
+    )
+
+
     args = parser.parse_args()
 
     MOMMY.YOU = args.you
     _config_logging(args.verbose)
     _assert_venv()
 
-    legacy_mommify()
-
+    if args.legacy:
+        legacy_mommify()
+    else:
+        mommify()
 
 def daddify_venv():
     return mommify_venv(is_mommy=False)
