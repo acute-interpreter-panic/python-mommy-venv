@@ -5,7 +5,7 @@
 
 Mommy's here to support you when running python~ ❤️
 
-`python-mommy-venv` tries to be as compatible with [`cargo-mommy`](https://github.com/Gankra/cargo-mommy). It used some code from [`python-mommy`](https://github.com/Def-Try/python-mommy) as starting point. The execution is completely different as it was very flawed, and the configuration is way different to make greater compatibility with `cargo-mommy`. For more information check the section [why not `python-mommy`](#why-not-python-mommy).
+`python-mommy-venv` tries to be as compatible with [`cargo-mommy`](https://github.com/Gankra/cargo-mommy). It used some code from [`python-mommy`](https://github.com/Def-Try/python-mommy) as starting point. The configuration is way different to make greater compatibility with `cargo-mommy` and to add more features. For more information check the section [why not `python-mommy`](#why-not-python-mommy).
 
 # buttplug.io integration
 
@@ -15,7 +15,7 @@ So if you want to see this implemented or just want to improve the day of a fell
 
 # Installation
 
-You can `pip install python-mommy-venv`~
+Mommy can be found on `pip`~
 
 ```sh
 pip install python-mommy-venv
@@ -23,72 +23,28 @@ pip install python-mommy-venv
 
 # Usage
 
-## Concept you should know
-
-If you work with python there are many things you might need hinder mommy from running explicitly. For example:
-
-- installing a local project with the `-e` flag and running the generated command
-- running any python module 
-- installing a package with `pip`
-
-They all have something in common, they call the python interpreter. So mommy's approach was to wrap the interpreter. However if mommy would do this globally, she would break many systems like Debian that rely on python~
-
-So what mommy does, is patch the virtual environment you (hopefully) run the python packages you develop in. 
-
-## Actually using the tool
-
-You need to make sure `python-mommy-venv` is installed in your virtual environment. Else mommy can't find the directory to patch~ 
-
-To patch the virtual env you can run the following command. Look at `mommify-venv -h` for more options.
+Run whatever python command you would normally but add `-m mommy` after python~
 
 ```
-mommify-venv  
+python -m mommy meow.py
+
+  File "/home/fname/Projects/OpenSource/python-mommy-venv/meow.py", line 4
+    time.sleep(0)dfsadfas
+                 ^^^^^^^^
+SyntaxError: invalid syntax
+
+does mommy's little girl need a bit of a break~?
 ```
 
-Mommy will fetch the new responses from `cargo-mommy`, if you don't want her to you can turn it of.
-She will then compile a config file with the parameters defined in the [configuration section](#configuration) and the fetched responses.
-
-If you want to change the config, you can run, and mommy will recompile the config with the updated environment:
+If you want to configure aliases to do so you can run `mommy_config`. This will prompt you for the options to print the aliases you could set, or to automatically configure the aliases inside of a virtual environment.
 
 ```
-mommify-venv-compile
+python -m mommy_config
 ```
 
-Here are examples of mommy responding to you~
+Alternatively you can choose to wrap the interpreter inside a virtual environment to automatically execute mommy without an alias. This is not recommended though
 
-```sh
-$ pip install requests
-Requirement already satisfied: requests in ./.venv/lib/python3.10/site-packages (2.32.4)
-[...]
-
-mommy loves you~
-
-$ python test.py
-Hello World
-
-what a good girl you are~
-
-$ python doesnt_exist.py .venv/bin/inner_python: can't open file 'doesnt_exist.py': [Errno 2] No such file or directory
-
-don't forget to hydrate~
-```
-
-## Daddy
-
-If you want mommy to call you daddy and never wanna touch mommy at all, then this program provides the following commands:
-
-```sh
-daddify-venv
-daddify-venv-compile
-```
-
-This will set the default values to daddy instead of mommy, but will still be overwritten by config files or environment variables, if either of those are set.
-
-The `--you` argument works the exact way, but you can tell mommy/daddy how to call you. The default is `girl`:
-
-```
-daddify-venv --you boy
-```
+> NOTE: all mommy's commands can also be run with daddy instead. 
 
 # Configuration
 
@@ -197,13 +153,11 @@ mommy is starting to wonder if you should just give up and become her breeding s
 
 # Why not `python-mommy`
 
-`python-mommy` has to be explicitly run by running `python -m python_mommy test.py` which won't work in real life scenarios. Read the [concept section](#concept-you-should-know) if you want to know why.
+My project has way more options to configure it.
 
-`python-mommy` has many minor improvements that should be made. Those all aren't really bad but they add up.
+`python-mommy` has many minor faults that should be fixed. Each of those aren't that bad, but they add up.
 
 `python-mommy` wasn't updated for one year. That means the responses are way to outdated, and also don't automatically update.
-
-The last two reasons can be easily fixed, but the first one requires a complete rewrite.... which `python-mommy-venv` is.
 
 # Licensing
 mommy likes freedom~ ❤️, and is licensed under [MIT](LICENSE-MIT).

@@ -1,29 +1,28 @@
 [project]
 description = "Mommy's here to support you when running python~ ❤️ [rewrite of python-mommy] [compatible with cargo-mommy]"
 name = "python_mommy_venv"
-dependencies = ["toml", "requests"]
+dependencies = [
+    "toml", 
+    "requests",
+    "xdg-base-dirs",
+    "typing_extensions",
+]
 authors = [
     {name = "Acute Interpreter Panic", email = "acute_interpreter_panic@proton.me"},
 ]
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
     'Programming Language :: Python :: 3',
     'License :: OSI Approved :: MIT License',
     'Operating System :: OS Independent',
 ]
-version = "0.0.1"
+version = "1.0.0"
 license-files = ["LICENSE"]
 
 [project.urls]
 Homepage = "https://github.com/acute-interpreter-panic/python-mommy-venv"
 Issues = "https://github.com/acute-interpreter-panic/python-mommy-venv/issues"
-
-[project.scripts]
-mommify-venv-compile = "python_mommy_venv.__main__:cli_compile_config"
-daddify-venv-compile = "python_mommy_venv.__main__:daddy_cli_compile_config"
-mommify-venv = "python_mommy_venv.__main__:mommify_venv"
-daddify-venv = "python_mommy_venv.__main__:daddify_venv"
 
 [build-system]
 requires = ["hatchling", "hatch-requirements-txt"]
@@ -33,4 +32,10 @@ build-backend = "hatchling.build"
 directory = "dist"
 
 [tool.hatch.build.targets.wheel]
-packages = ["python_mommy_venv"]
+packages = [
+    "python_mommy",
+    "mommy_config",
+    "daddy_config",
+    "mommy",
+    "daddy",
+]
