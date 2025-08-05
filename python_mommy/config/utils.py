@@ -66,14 +66,20 @@ def load_responses(disable_requests: bool = False) -> structure.Responses:
     fetch_new = False
     if not disable_requests:
         original_etag = data["etag"]
-        res = requests.head(responses_url)
-        fetch_new = original_etag != res.headers["etag"]
+        try:
+            res = requests.head(responses_url)
+            fetch_new = res.ok and original_etag != res.headers["etag"]
+        except (requests.exceptions.ConnectionError, requests.exceptions.ConnectTimeout):
+            pass
     if fetch_new:
-        res = requests.get(responses_url)
-        data = res.json()
-        data["etag"] = res.headers["etag"]
+        try:
+            res = requests.get(responses_url)
+            data = res.json()
+            data["etag"] = res.headers["etag"]
 
-        with responses_file.open("w") as f:
-            json.dump(data, f, indent=4)
+            with responses_file.open("w") as f:
+                json.dump(data, f, indent=4)
+        except (requests.exceptions.ConnectionError, requests.exceptions.ConnectTimeout):
+            pass
 
     return data
