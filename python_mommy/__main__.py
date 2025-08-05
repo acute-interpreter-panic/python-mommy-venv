@@ -1,7 +1,7 @@
 import argparse
+from enum import Enum
 
-from .static import MOMMY
-
+from .utils import MOMMY
 
 
 def _config_logging(verbose: bool, verbose_all: bool):
@@ -54,9 +54,7 @@ def _assert_venv(only_warn: bool = False):
             exit(1)
 
 
-def mommify_venv(is_mommy: bool = True):
-    MOMMY.set_roles(is_mommy)
-
+def mommify_config():
     parser = argparse.ArgumentParser(description=f"patch the virtual environment which will use {MOMMY.ROLE}")
 
     parser.add_argument(
@@ -79,28 +77,34 @@ def mommify_venv(is_mommy: bool = True):
         help=f'how do you want {MOMMY.ROLE} to call you?'
     )
 
-    parser.add_argument(
-        "--legacy",
-        action="store_true",
-        help="Currently it will add aliases in the selected source file, in legacy mode it will directly wrap the symlinks to the interpreter of the venv in a wrapper script."
-    )
-
-
     args = parser.parse_args()
 
     _config_logging(args.verbose or args.verbose_all, args.verbose_all)
     MOMMY.YOU = args.you
-    _assert_venv()
 
-    from .mommify import legacy_mommify, mommify
-    if args.legacy:
-        legacy_mommify()
-    else:
-        mommify()
+    
+    class Programs(Enum):
+        MOMMIFY_VENV = f"adds aliases for python -m {MOMMY.ROLE} to the activate script of the virtual environment"
+        MOMMIFY_PATCH_VENV = f"wraps the python binaries of the virtual environment with {MOMMY.ROLE} - could break the venv"
+        MOMMIFY_GLOBAL_CONFIG = f"tells you how you can configure your shell to globally use {MOMMY.ROLE}"
+    
+    from .utils import select
+    print("what do you want to do?")
+    p = select(Programs)
+    print("")
+
+    from .programs import mommify_global_config, mommify_patch_venv, mommify_venv
+    if p == Programs.MOMMIFY_VENV:
+        mommify_venv()
+    elif p == Programs.MOMMIFY_PATCH_VENV:
+        mommify_patch_venv()
+    elif p == Programs.MOMMIFY_GLOBAL_CONFIG:
+        mommify_global_config()
+        
 
 
 def daddify_venv():
-    return mommify_venv(is_mommy=False)
+    return mommify_config(is_mommy=False)
 
 
 # run as module

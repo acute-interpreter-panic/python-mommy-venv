@@ -6,7 +6,7 @@ import sys
 
 from . import mommy
 from .config import load_config
-from .static import MOMMY
+from .utils import MOMMY
 
 
 mommy_logger = logging.getLogger("mommy")

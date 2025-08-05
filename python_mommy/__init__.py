@@ -5,7 +5,7 @@ import time
 from dataclasses import dataclass
 
 from .config import load_config
-from .static import colors
+from .utils import colors
 
 
 @dataclass

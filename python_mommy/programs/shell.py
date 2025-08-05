@@ -6,8 +6,7 @@ from pathlib import Path
 from enum import Enum
 import re
 
-from .utils import find_venv_dir, select
-from ..static import MOMMY
+from ..utils import MOMMY, find_venv_dir, select
 
 
 mommy_logger = logging.getLogger("mommy")
@@ -101,7 +100,7 @@ def find_activate(venv_dir: Path) -> Iterable[Tuple[Shells, Path]]:
             yield activate_to_shell[p.name], p
 
 
-def mommify(venv_dir: Optional[Path] = None):
+def mommify_venv(venv_dir: Optional[Path] = None):
     venv_dir = find_venv_dir()
     if venv_dir is None:
         mommy_logger.error("%s couldn't find a venv directory to mess up", MOMMY.ROLE)
@@ -132,11 +131,12 @@ def mommify(venv_dir: Optional[Path] = None):
             f.write(text)
 
 
-def mommify_global_help():
+def mommify_global_config():
     print("what shell do you use?")
     shell = select(options=Shells)
     print()
     content = generate_aliases(shell, list(find_python_interpreter(Path("/", "usr", "bin"))))
+    print()
     if shell == Shells.POWER_SHELL:
         print("here is info, how to configure power shell:\nhttps://learn.microsoft.com/en-us/powershell/scripting/learn/shell/creating-profiles?view=powershell-7.5")
     else:

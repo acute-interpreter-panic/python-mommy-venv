@@ -1,15 +1,36 @@
 from typing import Optional, List, TypeVar, Tuple, Callable
 from collections.abc import Iterable
+from pathlib import Path
 import logging
 import sys
-from pathlib import Path
 from enum import Enum
 
-from ..static import MOMMY, colors
 
 
-mommy_logger = logging.getLogger("mommy")
-serious_logger = logging.getLogger("serious")
+class MOMMY:
+    ROLE = "mommy"
+    PRONOUN = "her"
+    YOU = "girl"
+
+    @classmethod
+    def set_roles(cls, is_mommy: bool):
+        if is_mommy:
+            cls.ROLE = "mommy"
+            cls.PRONOUN = "her"
+        else:
+            cls.ROLE = "daddy"
+            cls.PRONOUN = "his"
+
+class colors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    ENDC = '\033[0m'
 
 
 T = TypeVar('T')
@@ -56,6 +77,10 @@ def select(options: Iterable[T], to_string: Optional[Callable[[T], str]] = None)
 
 
 def find_venv_dir(venv_dir: Optional[Path] = None) -> Optional[Path]:
+    mommy_logger = logging.getLogger("mommy")
+    serious_logger = logging.getLogger("serious")
+
+
     if venv_dir is not None:
         if venv_dir.exists():
             serious_logger.debug("venv dir was specified")

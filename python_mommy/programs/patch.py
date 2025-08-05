@@ -6,8 +6,7 @@ import subprocess
 import sys
 
 
-from ..static import MOMMY
-from .utils import find_venv_dir
+from ..utils import MOMMY, find_venv_dir
 
 
 mommy_logger = logging.getLogger("mommy")
@@ -111,7 +110,7 @@ def _install_pip_hook(path: Path):
         f.write(text)
 
 
-def mommify(venv_dir: Optional[Path] = None):
+def mommify_patch_venv(venv_dir: Optional[Path] = None):
     venv_dir = find_venv_dir(venv_dir=venv_dir)
     if venv_dir is None:
         mommy_logger.error("%s couldn't find a venv directory to mess up~", MOMMY.ROLE)

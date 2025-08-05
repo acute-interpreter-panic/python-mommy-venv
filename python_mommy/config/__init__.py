@@ -8,7 +8,7 @@ from functools import lru_cache
 from . import structure
 from . import utils as _u
 
-from ..static import MOMMY
+from ..utils import MOMMY
 
 
 mommy_logger = logging.getLogger("mommy")

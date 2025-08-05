@@ -1,5 +1,5 @@
 from python_mommy import mommy
-from python_mommy.static import MOMMY
+from python_mommy.utils import MOMMY
 
 
 if __name__ == "__main__":
