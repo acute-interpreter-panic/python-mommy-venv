@@ -54,8 +54,7 @@ def find_venv_dir(venv_dir: Optional[Path] = None) -> Optional[Path]:
             serious_logger.warning("specified venv dir %s wasn't found", venv_dir)
             mommy_logger.warning("%s could not find the venv dir %s %s specified~ %s", MOMMY.ROLE, MOMMY.PRONOUN, MOMMY.YOU, venv_dir)
     
-    # DEBUG: needs to be changed back
-    if sys.prefix == sys.base_prefix:
+    if sys.prefix != sys.base_prefix:
         serious_logger.debug("detected running in venv %s", sys.prefix)
         return Path(sys.prefix)
     
