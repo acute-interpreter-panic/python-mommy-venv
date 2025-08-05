@@ -1,7 +1,9 @@
 from typing import Optional, List, TypeVar, Tuple, Callable
+from collections.abc import Iterable
 import logging
 import sys
 from pathlib import Path
+from enum import Enum
 
 from ..static import MOMMY, colors
 
@@ -35,7 +37,14 @@ def get_integer(bounds: Optional[Tuple[int, int]]) -> int:
         return i
 
 
-def select(options: List[T], to_string: Callable[[T], str] = lambda t: str(t)) -> T:
+def select(options: Iterable[T], to_string: Optional[Callable[[T], str]] = None) -> T:
+    options = list(options)
+
+    if isinstance(options[0], Enum):
+        to_string = lambda x: x.value
+    else:
+        to_string = lambda x: str(x)
+    
     s_rows: List[str] = []
     for i, o in enumerate(options):
         s_rows.append(f"{colors.OKCYAN}{i}{colors.ENDC}: {to_string(o)}")
