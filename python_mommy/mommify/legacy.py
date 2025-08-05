@@ -4,9 +4,9 @@ import logging
 import subprocess
 import sys
 
-from . import mommy
-from .config import load_config
-from .static import MOMMY
+from .. import mommy
+from ..config import load_config
+from ..static import MOMMY
 
 
 mommy_logger = logging.getLogger("mommy")
@@ -110,7 +110,7 @@ def _install_pip_hook(path: Path):
         f.write(text)
 
 
-def legacy_mommify():
+def mommify():
     bin_path = Path(sys.prefix, "bin").resolve()
 
     mommy_logger.info("%s looks in %s to mess %s %s system up~ <33", MOMMY.ROLE, MOMMY.PRONOUN, MOMMY.YOU, str(bin_path))

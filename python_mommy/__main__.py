@@ -6,7 +6,7 @@ import argparse
 from . import mommy
 from .config import load_config
 from .static import MOMMY
-from .legacy_mommify import legacy_mommify
+from .mommify import legacy_mommify
 
 log_level = logging.INFO
 
