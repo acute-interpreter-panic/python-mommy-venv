@@ -24,10 +24,6 @@ license-files = ["LICENSE"]
 Homepage = "https://github.com/acute-interpreter-panic/python-mommy-venv"
 Issues = "https://github.com/acute-interpreter-panic/python-mommy-venv/issues"
 
-[project.scripts]
-mommify-venv = "python_mommy.__main__:mommify_config"
-daddify-venv = "python_mommy.__main__:daddify_venv"
-
 [build-system]
 requires = ["hatchling", "hatch-requirements-txt"]
 build-backend = "hatchling.build"
@@ -38,6 +34,8 @@ directory = "dist"
 [tool.hatch.build.targets.wheel]
 packages = [
     "python_mommy",
+    "mommy_config",
+    "daddy_config",
     "mommy",
     "daddy",
 ]
