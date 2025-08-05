@@ -73,7 +73,7 @@ def generate_aliases(shell: SupportedShells, bin: Path) -> str:
 
 
 def get_regex(shell: SupportedShells):
-    return re.compile(fr"{get_comment(shell, START_COMMENT)}(.|\n)*?{get_comment(shell, END_COMMENT)}", re.MULTILINE)
+    return re.compile(get_comment(shell, START_COMMENT) + r".*?" + get_comment(shell, END_COMMENT), flags=re.DOTALL)
 
 
 def find_activate(venv_dir: Path) -> Iterable[Tuple[SupportedShells, Path]]:
@@ -110,7 +110,7 @@ def mommify_local(venv_dir: Optional[Path] = None):
             text = f.read()
 
         aliases = generate_aliases(shell, venv_dir / "bin")
-        if regex.match(text) is None:
+        if regex.search(text) is not None:
             serious_logger.info("already found aliases in file => replacing")
             text = re.sub(regex, aliases, text)
         else:
