@@ -40,7 +40,7 @@ def get_integer(bounds: Optional[Tuple[int, int]]) -> int:
 def select(options: Iterable[T], to_string: Optional[Callable[[T], str]] = None) -> T:
     options = list(options)
 
-    if to_string is not None:
+    if to_string is None:
         if isinstance(options[0], Enum):
             to_string = lambda x: x.value
         else:
