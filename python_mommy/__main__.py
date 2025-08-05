@@ -100,11 +100,6 @@ def mommify_config():
         mommify_patch_venv()
     elif p == Programs.MOMMIFY_GLOBAL_CONFIG:
         mommify_global_config()
-        
-
-
-def daddify_venv():
-    return mommify_config(is_mommy=False)
 
 
 # run as module
