@@ -80,12 +80,6 @@ def mommify_venv(is_mommy: bool = True):
     )
 
     parser.add_argument(
-        "-r", "--no-requests",
-        action="store_true",
-        help=f"by default {MOMMY.ROLE} makes one request to GitHub to fetch the newest responses, this disables that"
-    )
-
-    parser.add_argument(
         "--legacy",
         action="store_true",
         help="Currently it will add aliases in the selected source file, in legacy mode it will directly wrap the symlinks to the interpreter of the venv in a wrapper script."
@@ -103,6 +97,7 @@ def mommify_venv(is_mommy: bool = True):
         legacy_mommify()
     else:
         mommify()
+
 
 def daddify_venv():
     return mommify_venv(is_mommy=False)
