@@ -40,10 +40,11 @@ def get_integer(bounds: Optional[Tuple[int, int]]) -> int:
 def select(options: Iterable[T], to_string: Optional[Callable[[T], str]] = None) -> T:
     options = list(options)
 
-    if isinstance(options[0], Enum):
-        to_string = lambda x: x.value
-    else:
-        to_string = lambda x: str(x)
+    if to_string is not None:
+        if isinstance(options[0], Enum):
+            to_string = lambda x: x.value
+        else:
+            to_string = lambda x: str(x)
     
     s_rows: List[str] = []
     for i, o in enumerate(options):
