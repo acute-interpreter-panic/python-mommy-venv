@@ -84,8 +84,8 @@ def mommify_config():
 
     
     class Programs(Enum):
-        MOMMIFY_VENV = f"adds aliases for python -m {MOMMY.ROLE} to the activate script of the virtual environment"
-        MOMMIFY_GLOBAL_CONFIG = f"tells you how you can configure your shell to globally use {MOMMY.ROLE}"
+        MOMMIFY_GLOBAL_CONFIG = f"prints aliases"
+        MOMMIFY_VENV = f"configures aliases for virtual environment"
         MOMMIFY_PATCH_VENV = f"DEPRECATED: wraps the python binaries of the virtual environment with {MOMMY.ROLE} - could break the venv"
     
     from .utils import select
@@ -100,9 +100,6 @@ def mommify_config():
         mommify_patch_venv()
     elif p == Programs.MOMMIFY_GLOBAL_CONFIG:
         mommify_global_config()
-
-    from . import get_response
-    get_response(0)
 
 
 # run as module
