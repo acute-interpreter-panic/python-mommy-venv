@@ -17,7 +17,7 @@ WRAPPER_TEMPLATE = """#!{inner_bin}
 # -*- coding: utf-8 -*-
 
 import sys, subprocess
-from python_mommy_venv import get_response
+from python_mommy import get_response
 
 
 INTERPRETER = "{inner_bin}"

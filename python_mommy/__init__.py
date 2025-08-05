@@ -1,11 +1,22 @@
-import random
-import sys
-from typing import Optional
-import time
-from dataclasses import dataclass
 
-from .config import load_config
-from .utils import colors
+try:
+    import sys 
+    import random
+    from typing import Optional
+    import time
+    from dataclasses import dataclass
+
+    from .config import load_config
+    from .utils import colors
+
+except (ModuleNotFoundError, ImportError):
+    import sys, subprocess
+
+    proc = subprocess.run([
+        sys.executable,
+        *sys.argv[1:],
+    ])
+    sys.exit(proc.returncode)
 
 
 @dataclass
