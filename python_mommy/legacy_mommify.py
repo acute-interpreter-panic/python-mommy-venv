@@ -4,8 +4,6 @@ import logging
 import subprocess
 import sys
 
-from . import mommy
-from .config import load_config
 from .utils import MOMMY
 
 

@@ -101,6 +101,9 @@ def mommify_config():
     elif p == Programs.MOMMIFY_GLOBAL_CONFIG:
         mommify_global_config()
 
+    from . import get_response
+    get_response(0)
+
 
 # run as module
 if __name__ == "__main__":
