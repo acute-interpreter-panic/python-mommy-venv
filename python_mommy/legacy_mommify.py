@@ -1,13 +1,12 @@
-from typing import Optional
 from pathlib import Path
 import stat
 import logging
 import subprocess
 import sys
 
-
-from ..static import MOMMY
-from .utils import find_venv_dir
+from . import mommy
+from .config import load_config
+from .static import MOMMY
 
 
 mommy_logger = logging.getLogger("mommy")
@@ -111,12 +110,7 @@ def _install_pip_hook(path: Path):
         f.write(text)
 
 
-def mommify(venv_dir: Optional[Path] = None):
-    venv_dir = find_venv_dir(venv_dir=venv_dir)
-    if venv_dir is None:
-        mommy_logger.error("%s couldn't find a venv directory to mess up~", MOMMY.ROLE)
-        serious_logger.error("couldn't find a venv directory")
-        exit(1)
+def legacy_mommify():
     bin_path = Path(sys.prefix, "bin").resolve()
 
     mommy_logger.info("%s looks in %s to mess %s %s system up~ <33", MOMMY.ROLE, MOMMY.PRONOUN, MOMMY.YOU, str(bin_path))
