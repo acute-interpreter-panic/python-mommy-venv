@@ -14,17 +14,9 @@ serious_logger = logging.getLogger("serious")
 WRAPPER_TEMPLATE = """#!{inner_bin}
 # -*- coding: utf-8 -*-
 
-import sys, subprocess
-from python_mommy_venv import get_response
+from python_mommy import mommy
 
-
-INTERPRETER = "{inner_bin}"
-result = subprocess.run([INTERPRETER] + sys.argv[1:])
-code = result.returncode
-
-print()
-print(get_response(code))
-exit(code=code)
+mommy("{inner_bin}")
 """
 
 
