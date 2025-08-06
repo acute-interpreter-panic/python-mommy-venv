@@ -23,6 +23,7 @@ except (ModuleNotFoundError, ImportError):
 class Context:
     mommy_start_time: float = 0
     execution_time: int = 0
+    returncode: int = 0
 
 
 def get_response_from_situation(situation: str, colorize: Optional[bool] = None, context: Optional[Context] = None):
@@ -53,6 +54,9 @@ def get_response_from_situation(situation: str, colorize: Optional[bool] = None,
     if config["advanced"]["print_mommy_time"]:
         t_difference = round((time.time() - context.mommy_start_time) * 1000)
         prefix += f"[{t_difference}ms] "
+
+    if config["advanced"]["print_returncode"]:
+        prefix += f"[{context.returncode}] "
 
     return prefix + message.replace("\n", "\n" + " " * len(prefix))
 
@@ -85,6 +89,7 @@ def mommy(executable: str = sys.executable):
     finally:
         context.mommy_start_time = time.time()
         context.execution_time = round((time.time() - prev_time) * 1000)
+        context.returncode = proc.returncode
 
         print("")
         print(get_response(code=proc.returncode, context=context))

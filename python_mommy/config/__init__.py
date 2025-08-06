@@ -39,6 +39,7 @@ def load_config(disable_requests: bool = False) -> structure.Config:
             "print_time": False,
             "print_mommy_time": False,
             "disable_requests": False,
+            "print_returncode": False,
         },
     }
 
