@@ -60,22 +60,33 @@ def get_response(code: int, colorize: Optional[bool] = None, context: Optional[C
     return get_response_from_situation("positive" if code == 0 else "negative", colorize=colorize, context=context)
 
 
-def mommy():
+def mommy(executable: str = sys.executable):
     # credits to the original project
     # https://github.com/Def-Try/python-mommy/blob/main/python_mommy/__init__.py
     import sys, subprocess
     import time
-    from . import get_response
 
     context = Context()
-
     prev_time = time.time()
-    proc = subprocess.run([
-        sys.executable,
+
+    proc = subprocess.Popen([
+        executable, 
         *sys.argv[1:],
     ])
-    context.mommy_start_time = time.time()
-    context.execution_time = round((time.time() - prev_time) * 1000)
 
-    print("")
-    print(get_response(proc.returncode, context=context))
+    # wait while the process is running
+    try:
+        proc.wait()
+    # if a keyboard interrupt was raised ignore it
+    # it will be raised in the spawned process as well
+    except KeyboardInterrupt:
+        import logging
+        logging.getLogger("serious").info("preventing keyboard interrupt of only mommy")
+    finally:
+        context.mommy_start_time = time.time()
+        context.execution_time = round((time.time() - prev_time) * 1000)
+
+        print("")
+        print(get_response(code=proc.returncode, context=context))
+        # make sure mommy exits the same way the child process exits
+        sys.exit(proc.returncode)

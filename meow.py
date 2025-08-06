@@ -1,4 +1,7 @@
 import time
 
 print("running meow.py")
-time.sleep(0)dfsadfas
+try:
+    time.sleep(1)
+except KeyboardInterrupt:
+    raise
